@@ -4,7 +4,7 @@ OpenH264Fuzz
 A lightweight fuzzer for the encoder and decoder of OpenH264
 
 
-###Usage Examples
+### Usage Examples
 
 
 Fuzzing the decoder:
@@ -32,7 +32,7 @@ Filter fuzzing results:
 
 
 
-###Help Menu
+### Help Menu
     
     usage: fuzzer.py [-decoder] [-encoder] [-decbin path] [-encbin path]
                      [-count #] [-bucket path] [-samples path] [-resources path]
