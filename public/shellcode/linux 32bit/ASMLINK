@@ -1,0 +1,2 @@
+nasm -f elf exec.asm
+ld -o exec exec.o

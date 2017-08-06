@@ -1,0 +1,136 @@
+:root {
+    --color-bg: #17191d;
+    --color-link: #b33e64;
+    --color-hr: #1a2435;
+    --color-handwriting: #D3D6DB;
+    --color-social-hover: #5c1c30;
+    --color-section-glyph: #73263f;
+    --color-text: #FEF4E8;
+    --color-iam-text: #656A73;
+    --color-iam-at-text: #C1C0B9;
+    --color-popover: #eae6e8;
+    --color-popover-bg: #272935;
+    --color-popover-title: #C1C0B9;
+    --color-popover-title-bg: #1F252B;
+    --color-popover-title-border-bottom: #1b263b;
+    --color-footer-bg: #3e4859;
+    --color-section-text: #b7a575;
+}
+
+body {
+    background: var(--color-bg);
+    color: #D3D6DB;
+    font-family: 'Lato', serif;
+}
+
+a {
+    color: var(--color-link);
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+hr {
+    background-color: var(--color-hr);
+    height: 1px;
+    border: 0;
+}
+
+.handwriting {
+    font-family: 'Indie Flower', serif;
+    font-size: 40px;
+    color: var(--color-handwriting);
+}
+
+.img-circle {
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.img-circle img {
+    height: 100%;
+    transform: translateX(-50%);
+    margin-left: 50%;
+}
+
+.section-glyph {
+    color: var(--color-section-glyph);
+}
+
+.section-text {
+    color: var(--color-section-text);
+}
+
+.btn-social:hover {
+    color: var(--color-social-hover);
+}
+
+#iam-text {
+    color: var(--color-iam-text);
+    font-size: 100%
+}
+
+#iam-at-text {
+    color: var(--color-iam-at-text);
+    font-size: 120%
+}
+
+.img-evenly {
+    text-align: justify;
+}
+
+.img-evenly:after {
+    content: '';
+    display: inline-block;
+    width: 100%;
+}
+
+.popover {
+    color: var(--color-popover);
+    background: var(--color-popover-bg);
+}
+
+.popover-title {
+    background: var(--color-popover-title-bg);
+    color: var(--color-popover-title);
+    text-align: center;
+    border-bottom-color: var(--color-popover-title-border-bottom);
+}
+
+.popover-content {
+    background: var(--color-popover-bg);
+    padding: 5px;
+}
+
+footer {
+    background: var(--color-footer-bg);
+}
+
+.transition-icon:hover {
+    filter: grayscale(0%);
+    transition: .5s ease-in-out;
+}
+
+.transition-icon {
+    height: 100px;
+    filter: grayscale(80%);
+    transition: .5s ease-in-out;
+}
+
+.avatar {
+}
+
+.light-up {
+    animation: light-up 3s;
+}
+
+@keyframes light-up {
+    from {
+        filter: grayscale(100%)
+    }
+    to {
+        filter: grayscale(0%)
+    }
+}

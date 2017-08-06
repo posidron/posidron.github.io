@@ -1,0 +1,329 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0078)http://www.hackerboard.de/tutorials/netzwerkstrukturen/Netzwerk-Topologien.htm -->
+<!-- saved from url=(0022)http://internet.e-mail --><HTML><HEAD><TITLE>Netzwerk - Topologien</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2600.0" name=GENERATOR></HEAD>
+<BODY link=#6B8E23 alink=#6B8E23 vlink=#6B8E23 text=#000000 bgColor=#ffffff>
+<div align="center"><B><font face="Verdana, Arial, Helvetica, sans-serif" 
+size=2><img src="images/tripbit_logo.png" width="174" height="128"></font><FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=3><br>
+  <br>
+  Netzwerk - Topologien</FONT></B> <FONT face="Verdana, Arial, Helvetica, sans-serif" 
+size=2><BR>
+  <br>
+  </FONT> </div>
+<table width="83%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td width="56%"><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" 
+size=2>Author:&nbsp; </font></div></td>
+    <td width="44%"><font face="Verdana, Arial, Helvetica, sans-serif" 
+size=2>posidron</font></td>
+  </tr>
+  <tr> 
+    <td><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" 
+size=2>Contact:&nbsp; </font></div></td>
+    <td><font face="Verdana, Arial, Helvetica, sans-serif" 
+size=2><a href="posidron@mail.com">posidron@tripbit.org</a></font></td>
+  </tr>
+  <tr> 
+    <td><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" 
+size=2>Website:&nbsp; </font></div></td>
+    <td><font face="Verdana, Arial, Helvetica, sans-serif" 
+size=2><a href="www.tripbit.org">tripbit.org</a></font></td>
+  </tr>
+  <tr> 
+    <td><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" 
+size=2>Date:&nbsp;</font></div></td>
+    <td><font face="Verdana, Arial, Helvetica, sans-serif" 
+size=2>Oct., 18th 2002</font></td>
+  </tr>
+</table>
+
+<br>
+<HR SIZE=1>
+<FONT face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+</FONT><font color="#333333"><em>&#8226; </em></font><FONT face="Verdana, Arial, Helvetica, sans-serif" size=2><B>Bus 
+- Topologie</B><BR>
+<DIV align=justify>Die Bus - Topologie ist der Aufbau eines Netzwerkes, bei dem 
+  alle Arbeitsstationen an ein gemeinsames Medium, dem Bus, angeschlossen sind. 
+  Jede Arbeitsstation kann in diesem Netzwerk mit einer beliebigen anderen Arbeitsstation 
+  kommunizieren. Wenn eine Arbeitsstation Daten zu einer anderen Arbeitsstation 
+  versenden will, muss der Bus frei sein, d.h. es darf zu diesem Zeitpunkt keine 
+  andere Arbeitsstation Daten versenden. Dies muss durch das Netzzugriffsverfahren 
+  sichergestellt werden. Wenn eine Bus Netzwerk erweitert werden soll, durch ein 
+  oder mehrere Arbeitsstationen, ist dies mit einem kurzzeitigem Ausfall des Netzwerkes 
+  verbunden. Diese Erweiterung des Netzwerkes wird nur begrenzt durch die verwendeten 
+  Zugriffsprotokolle und Kabel. Eine Beschädigung des Busses, egal an welcher 
+  Stelle, oder der Ausfall der Terminierung an einem Busende, bedeutet jedoch 
+  den Abbruch der gesamten Kommunikation unter den angeschlossenen Arbeitsstationen. 
+  Das typische Beispiele für eine Bus-Verkabelung ist das Ethernet, in seiner 
+  Ausprägung als 10Base5 und 10Base2. Die Bus-Topologie ist immer noch die verbreiteste 
+  Methode für eine LAN-Vernetzung.<BR>
+  <BR>
+  <font face="Verdana, Arial, Helvetica, sans-serif" size=2><img height=113 
+src="images/Bus.png" width=346></font><BR>
+  <BR>
+</DIV>
+</FONT> 
+<TABLE cellSpacing=2 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR vAlign=top bgColor=#A7BDA6>
+      <TD width="44%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Vorteil</strong></FONT></TD>
+      <TD width="56%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Nachteil</strong></FONT></TD>
+    </TR>
+  <TR vAlign=top bgcolor="#F6FAF0">
+    <TD width="44%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Einfache Installierung und Erweiterung.<BR>- Kurze Leitungen 
+      daher,<BR>- Geringe Verkabelungskosten und i.d.R. ist kein Hub nötig. 
+      <BR>- Der Ausfall eines einzelnen Rechners führt zu keiner Störung des 
+      übrigen Netzes.<BR></FONT></TD>
+    <TD width="56%" bgcolor="#F6FAF0"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Begrenzte Netzausdehnung<BR>- Ist das Kabel an irgendeiner Stelle 
+      defekt, ist das komplette Netzwerk nicht mehr 
+  lauffähig.</FONT></TD></TR></TBODY></TABLE>
+<FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<BR>
+</FONT><font color="#333333"><em>&#8226; </em></font><FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><B>Ring - Topologie</B><BR>
+<DIV align=justify>Die Ring - Topologie ist der Aufbau eines Netzwerkes, bei dem 
+  jede Arbeitsstation über ein ringförmiges Netz mit genau einem Vorgänger und 
+  einem Nachfolger verbunden ist. Empfängt eine Arbeitsstation Daten, reicht sie 
+  sie an die nächste Arbeitsstation weiter, bis das Ziel erreicht ist. Wenn ein 
+  Segment ausfällt, würde das den Ausfall des gesamten Netzes bedeuten, daher 
+  sind die Leitungen i.d.R. so ausgelegt, dass die Daten über eine Leitung versendet 
+  und über die andere empfangen werden kann. Bei der Übertragung werden die Daten 
+  von jeder einzelnen Arbeitsstation nicht nur empfangen u. ggf. an den Nachfolger 
+  weitergegeben, sondern auch regeneriert. Wenn dort mal ein Segment ausfallen 
+  würde, werden diese beiden offenen Leitungen werden zu einem primären Ring zusammengeschlossen. 
+  Das Netz kommuniziert nun mit weniger Bandbreite. Das ausgefallene Segment wird 
+  rekonfiguriert, damit es später wieder genutzt werden kann. Würde nun ein weiteres 
+  Segment ausfallen, bedeutet dies den Zerfall des Ringes in zwei funktionsfähige 
+  Teile. Würde man an ein gesundes Netzwerk, also ein ganzes eine weiteres Arbeitsstation 
+  einbringen, führt das zu einer kurzzeitigen Netzunterbrechung. Der typische 
+  Vertreter für eine Doppelring Topologie ist FDDI(Fiber Distributed Data Interface).</DIV>
+<BR>
+<BR>
+<IMG 
+height=177 src="images/Ring.png" width=178> <BR>
+<BR>
+<TABLE cellSpacing=2 cellPadding=0 width="100%" border=0>
+  <TBODY>
+    <TR vAlign=top bgColor=#A7BDA6> 
+      <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Vorteil</strong></FONT></TD>
+      <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Nachteil</strong></FONT></TD>
+    </TR>
+    <TR vAlign=top bgcolor="#F6FAF0"> 
+      <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Grosse Netzausdehnung<BR>
+        - Geringe Verkabelungskosten<BR>
+        - Anzahl der Rechner theoretisch unbegrenzt<BR>
+        - Signalregeneration keine Ausdehnungsbeschränkung<BR>
+        - Keine Datenkollisionen </FONT></TD>
+      <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Aufwendige Fehlersuche<BR>
+        - Hoher Verkabelungsaufwand<BR>
+        - Die Reaktionszeit kann bei großen Ringen sehr lang sein </FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<B><BR>
+<BR>
+</B></FONT><font color="#333333"><em>&#8226; </em></font><FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><B>Stern - Topologie</B><BR>
+<DIV align=justify>Die Stern - Topologie ist der Aufbau eines Netzwerkes, bei 
+  dem alle Arbeitsstationen an einer zentralen Station<FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2>(HUB)</FONT> angeschlossen 
+  sind, über welche die gesamte Datenübertragung läuft. Jede Arbeitsstation wickelt 
+  ihre Kommunikation über diesen zentralen Knoten(HUB) ab. Fällt diese Station(HUB) 
+  aus, ist das gesamte Netz blockiert. Ein Ausfall einer einzelnen Station dagegen 
+  beeinträchtigt das Netz nicht. Dafür ist ein hoher Verkabelungsaufwand erforderlich. 
+  Zur Erweiterung des Systems um weitere Arbeitsstationen ist häufig eine leistungsfähigere/r 
+  Zentralstation(HUB) erforderlich. Ein typischer Vertreter für eine moderne Stern-Topologie 
+  ist das Ethernet, in seinen Ausprägungen 10BaseT oder 100BaseT4.</DIV>
+<BR>
+<BR>
+<IMG 
+height=128 src="images/Stern.png" width=202> <BR>
+<BR>
+</FONT></FONT> 
+<TABLE cellSpacing=2 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR vAlign=top bgColor=#A7BDA6>
+      <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Vorteil</strong></FONT></TD>
+      <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Nachteil</strong></FONT></TD>
+    </TR>
+  <TR vAlign=top bgcolor="#F6FAF0">
+    <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Einfache Vernetzung und Erweiterung<BR>- Die Verteiler(HUB) 
+      wirken gleichzeitig als Signalverstärker <BR>- Einfache u. kostengünstige 
+      Netzsteuerung und Kontrolle <BR>- Gleicher Datenbestand für alle Knoten 
+      <BR>- Keine Störung des Netzwerks bei Ausfall eines beteiligten Rechners 
+      <BR></FONT></TD>
+    <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Hoher Verkabelungsaufwand <BR>- Netzausfall bei Ausfall oder 
+      Überlastung des Hubs<BR>- Höhere Verkabelungskosten 
+  <BR></FONT></TD></TR></TBODY></TABLE>
+<FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<BR>
+</FONT><font color="#333333"><em>&#8226; </em></font><FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><B>Stern - Ring Topologie</B><BR>
+<DIV align=justify>Die Stern - Ring - Topologie ist ein Netzwerk mit der Kombination 
+  aus der Stern - Topologie und der Ring - Topologie. Die einzelnen Hub sind als 
+  logischer Ring verknüpft, an diesesen HUBs sind die Arbeitsstationen sternförmig 
+  angeschlossen. Man spricht von einer Stern - Ring - Topologie. Fällt hier ein 
+  HUB aus, so entsteht bei Verwendung einer Ringleitung ein totaler Ausfall des 
+  Netzwerks. Wenn hingegen ein Rechner ausfällt, ist das restliche Netzwerk davon 
+  nicht beeinträchtigt.</DIV>
+<BR>
+<BR>
+<IMG height=254 
+src="images/Ring-Bus.png" width=213> <BR>
+<BR>
+</FONT> 
+<TABLE cellSpacing=2 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR vAlign=top bgColor=#A7BDA6>
+      <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Vorteil</strong></FONT></TD>
+      <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Nachteil</strong></FONT></TD>
+    </TR>
+  <TR vAlign=top bgcolor="#F6FAF0">
+    <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Ist einfacher zu Installieren als ein physischer Token Ring.<BR>- 
+      Fällt ein Rechner aus, ist das restliche Netzwerk davon nicht 
+      betroffen.</FONT></TD>
+    <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Fällt ein Verbindungsrechner(HUB) aus, dann fällt der gesamte 
+      Ring aus.</FONT></TD></TR></TBODY></TABLE>
+<FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<BR>
+</FONT><font color="#333333"><em>&#8226; </em></font><FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><B>Stern - Bus Topologie</B><BR>
+<DIV align=justify>Ein Netzwerk mit der Stern - Bus Topologie ist eine Kombination 
+  aus der Stern - Topologie und der Bus - Topologie. Über eine Sternstruktur sind 
+  die Arbeitsstationen an einen Hub angeschlossen. Die vorhandenen HUBs werden 
+  über eine Busstruktur miteinander verbunden. Man spricht von einer Stern - Bus 
+  Topologie. Fällt ein HUB aus, arbeitet das restliche Netzwerk normal weiter, 
+  nur die Verbindung der zu diesem HUB angeschlossenen Arbeitsstation ist unterbrochen. 
+  Wenn hingegen eine Arbeitsstation ausfällt, ist das restliche Netzwerk davon 
+  nicht beeinträchtigt.</DIV>
+<BR>
+<BR>
+<IMG height=124 
+src="images/Stern-bus.png" width=405> <BR>
+<BR>
+</FONT> 
+<TABLE cellSpacing=2 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR vAlign=top bgColor=#A7BDA6>
+      <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Vorteil</strong></FONT></TD>
+      <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Nachteil</strong></FONT></TD>
+    </TR>
+  <TR vAlign=top bgcolor="#F6FAF0">
+    <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Fällt ein Rechner aus, so ist das restliche Netz davon nicht 
+      beeinträchtig.</FONT></TD>
+    <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Fällt ein Hub aus, so ist die Verbindung zu allen an diesem Hub 
+      angeschlossenen Arbeitsstationen 
+unterbrochen.<BR></FONT></TD></TR></TBODY></TABLE>
+<FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<BR>
+</FONT><font color="#333333"><em>&#8226; </em></font><FONT 
+face="Verdana, Arial, Helvetica, sans-serif" size=2><B>Baum Topologie</B><BR>
+<DIV align=justify>Die Baumtopologie ist dadurch gekennzeichnet, dass ausgehend 
+  von einer Wurzel, eine Menge von Verzweigungen zu weiteren Knoten existiert, 
+  die bis auf die letzte Stufe wiederum die gleiche grundsätzliche Struktur mit 
+  weiteren Verzweigungen aufbauen. Die Baumtopologie ist wegen der strukturellen 
+  Äquivalenz ihrer Teile und der Rekursivität der Gesamtstruktur in der Informationsübertragung 
+  besonders beliebt. Frühere Breitbandnetze hatten eine Baumstruktur, weil man 
+  an der Wurzel einen zentralen Umsetzer/Verstärker anbringen konnte. Modulare 
+  moderne Netze, basierend auf einer strukturierten Verkabelung mit einer Hub-Hierarchie, 
+  haben ebenfalls eine Baumstruktur. Diese Struktur eignet sich gut für flächendeckende 
+  Verkabelung oder für Netze in mehrstöckigen Gebäuden.</DIV>
+<BR>
+<IMG height=182 
+src="images/Baum.png" width=233> <BR>
+<BR>
+</FONT> 
+<TABLE cellSpacing=2 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR vAlign=top bgColor=#A7BDA6>
+      <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Vorteil</strong></FONT></TD>
+      <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Nachteil</strong></FONT></TD>
+    </TR>
+  <TR vAlign=top bgcolor="#F6FAF0">
+    <TD width="42%" bgcolor="#F6FAF0"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Gesamte Leitungslänge, sowie Komplexität der Schaltzentralen 
+      vermindert.</FONT></TD>
+    <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Ein Ausfall eines Arbeitsstation betrifft ganze Äste. <BR>- 
+      Verzweigungen verursachen höhere Installationskosten, insbesondere<BR>wenn 
+      Glasfaserkabel bzw. Koaxialkabel verwendet werden. 
+</FONT></TD></TR></TBODY></TABLE>
+<FONT 
+face="Verdana, Arial, Helvetica, sans-serif" 
+size=2><B><BR>
+<BR>
+<BR>
+</B></FONT><font color="#333333"><em>&#8226; </em></font><FONT 
+face="Verdana, Arial, Helvetica, sans-serif" 
+size=2><B>Vermascht</B><BR>
+<DIV align=justify>Jeder Netzwerkteilnehmer ist untereinander verbunden. Alle 
+  Netzwerkteilnehmer haben eine ständige Verbindung zu jedem anderem Netzwerkteilnehmer. 
+  Die vermaschte Topologie kommt dann zum Einsatz, wenn zum Beispiel aus Redundanzgründen 
+  von einem Knoten eines Netzwerks mehr als zwei Gegenstationen direkt erreichbar 
+  sind. Heutige Netzwerke die ein grösseres geographisches Gebiet erschliessen 
+  sind in der Regel in dieser Art aufgebaut. Wichtige Areale sind meistens auf 
+  zwei oder mehr Wegen erreichbar. Es ist dann die Aufgabe von intelligenten Verbindungsknoten, 
+  den optimalen aber auch offenen Pfad für die Daten zu wählen.</DIV>
+<BR>
+<BR>
+<IMG height=172 
+src="images/Vermischt.png" width=200> <BR>
+<BR>
+</FONT> 
+<TABLE cellSpacing=2 cellPadding=0 width="100%" border=0>
+  <TBODY>
+  <TR vAlign=top bgColor=#A7BDA6>
+      <TD width="42%" bgcolor="#A7BDA6"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Vorteil</strong></FONT></TD>
+      <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2><strong>&nbsp;Nachteil</strong></FONT></TD>
+    </TR>
+  <TR vAlign=top bgcolor="#F6FAF0">
+    <TD width="42%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- "Jeder" kann mit "Jedem" direkt kommunizieren.<BR>- Mehrere 
+      Verbindungen gleichzeitig möglich.<BR>- Sehr hohe Ausfallsicherheit<BR>- 
+      Defekte Direktverbindungen können durch geschicktes Schalten umgangen 
+      werden.<BR>- Hohe Geschwindigkeit, auch bei zusätzlichen 
+    Stationen.</FONT></TD>
+    <TD width="58%"><FONT face="Verdana, Arial, Helvetica, sans-serif" 
+      size=2>- Hoher Verkabelungsaufwand und aufwendige Verschaltung.<BR>- 
+      Kostenintensiv<BR>- Umfangreiche, von den einzelnen Knoten abzuwickelnde 
+      Übertragungssteuerung.</FONT></TD></TR></TBODY></TABLE><BR>
+<HR SIZE=1>
+<FONT face="Verdana, Arial, Helvetica, sans-serif" 
+size=2>© Copyright 2002 - Tripbit</FONT> 
+</BODY></HTML>

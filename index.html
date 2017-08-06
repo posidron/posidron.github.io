@@ -1,1 +1,411 @@
-Hello World
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="expires" content="0"/>
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="pragma" content="no-cache"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Christoph Diehl</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Indie+Flower">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    <link rel="stylesheet" href="static/css/default.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="static/js/default.js"></script>
+    <script src="static/js/analytics.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1>
+                <span class="handwriting">Christoph Diehl</span>
+            </h1>
+        </div>
+        <div class="col-md-3">
+            <div class="img-circle img-circle">
+                <img class="avatar" src="static/images/avatar.jpg">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div id="iam-at-text">Mozilla Product Integrity</div>
+            <div id="iam-text">Security Engineer</div>
+        </div>
+        <div class="col-md-3">
+            <blockquote class="pull-right">
+                <p><code>&lt;strong&gt;mozilla&lt;sourcetext&gt;</code></p>
+                <cite>
+                    <small>Mozilla Firefox &lt;= 1.0.7</small>
+                </cite>
+            </blockquote>
+        </div>
+        <div class="col-xs-12">
+            <div class="pull-right">
+                <p>
+                    <a class="btn btn-social" href="mailto:cdiehl@mozilla.com">
+                        <span class="fa fa-envelope"></span>
+                    </a>
+                    <a class="btn btn-social" href="skype:nordisop@gmail.com">
+                        <span class="fa fa-skype"></span>
+                    </a>
+                    <a class="btn btn-social" href="https://www.irccloud.com/invite?channel=%23fuzzing&hostname=irc.mozilla.org&port=6697&ssl=1">
+                        <span class="fa fa-firefox"></span>
+                    </a>
+                    <a class="btn btn-social" href="https://vk.com/posidron">
+                        <span class="fa fa-vk"></span>
+                    </a>
+                    <a class="btn btn-social" href="https://fb.com/posidron">
+                        <span class="fa fa-facebook"></span>
+                    </a>
+                    <a class="btn btn-social" href="https://twitter.com/posidron">
+                        <span class="fa fa-twitter"></span>
+                    </a>
+                    <a class="btn btn-social" href="https://www.instagram.com/posidron">
+                        <span class="fa fa-instagram"></span>
+                    </a>
+                    <a class="btn btn-inverse btn-social" href="https://github.com/posidron">
+                        <span class="fa fa-github"></span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <hr class="divider"/>
+    <h4 class="section-text"><i class="fa fa-cubes section-glyph" aria-hidden="true"></i> projects</h4>
+    <br/>
+    <div class="img-evenly">
+        <a href="https://github.com/mozillasecurity/framboise">
+            <img src="static/images/framboise.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Framboise"
+                 data-content="A modular fuzzer for in-depth testing of WebAPIs."/>
+        </a>
+        <a href="http://mozillasecurity.github.io/laniakea">
+            <img src="static/images/laniakea.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Laniakea"
+                 data-content="A utility for managing EC2 instances at AWS and aids in setting up a fuzzing cluster. Now also part of FuzzManager."/>
+        </a>
+        <a href="https://github.com/mozillasecurity/octo">
+            <img src="static/images/octo.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Octo.js"
+                 data-content="A unified fuzzing library in JavaScript."/>
+        </a>
+        <a href="https://github.com/MozillaSecurity/dolly">
+            <img src="static/images/dolly.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Dolly"
+                 data-content="A Cookiecutter project template for projects in Python."/>
+        </a>
+        <a href="https://github.com/mozillasecurity/hermes">
+            <img src="static/images/hermes.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Hermes"
+                 data-content="Hermes is the codename for the integrated Message Manager fuzzer in Firefox."/>
+        </a>
+        <a href="https://github.com/mozillasecurity/quokka">
+            <img src="static/images/quokka.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Quokka"
+                 data-content="A utility to launch and monitor application for faults."/>
+        </a>
+        <a href="http://mozillasecurity.github.io/peach">
+            <img src="static/images/peach.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Peach"
+                 data-content="A fuzzing framework which uses a DSL for building fuzzers and an observer based architecture to execute and monitor them. <a href='public/programs/demos/moz_peach_demo.webm'>Demo</a>"/>
+        </a>
+        <a href="http://mozillasecurity.github.io/dharma">
+            <img src="static/images/dharma.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Dharma"
+                 data-content="A generation-based, context-free grammar fuzzer."/>
+        </a>
+        <a href="http://mozillasecurity.github.io/hedwig">
+            <img src="static/images/hedwig.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Hedwig"
+                 data-content="A commit monitor for GitHub using the GitHub REST API."/>
+        </a>
+        <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=fuzzing-ipc-ipdl">
+            <img src="static/images/faulty.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Faulty"
+                 data-content="A patch for fuzzing IPC Protocol Definition Language (IPDL) Protocols."/>
+        </a>
+        <a href="https://mozillasecurity.github.io/fuzzos">
+            <img src="static/images/fuzzos.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="FuzzOS"
+                 data-content="A Docker base image customized for fuzzing and running fuzzer instances at scale."/>
+        </a>
+        <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=fuzzing-shmem">
+            <img src="static/images/shmem.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="Shmem"
+                 data-content="A Shared Memory fuzzer integrated in Firefox."/>
+        </a>
+        <a href="https://github.com/mozillasecurity/fuzzdata">
+            <img src="static/images/fuzzdata.png"
+                 class="pop transition-icon"
+                 data-container="body" data-toggle="popover" data-placement="bottom"
+                 data-original-title="FuzzData"
+                 data-content="Fuzzing resources for feeding various fuzzers with input."/>
+        </a>
+    </div>
+    <hr class="divider"/>
+    <h4 class="section-text"><i class="fa fa-cogs section-glyph" aria-hidden="true"></i> fuzzing</h4>
+    <br>
+    <dl class="dl-horizontal">
+        <dt>WebAnimations</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1334591">https://bugzilla.mozilla.org/show_bug.cgi?id=1334591</a>
+        </dd>
+        <dt>WebCrypto</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1037373">https://bugzilla.mozilla.org/show_bug.cgi?id=1037373</a>
+        </dd>
+        <dt>WebNFC</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1023086">https://bugzilla.mozilla.org/show_bug.cgi?id=1023086</a>
+        </dd>
+        <dt>OpenH264</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=959432">https://bugzilla.mozilla.org/show_bug.cgi?id=959432</a>
+        </dd>
+        <dt>MediaRecorder</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=875414">https://bugzilla.mozilla.org/show_bug.cgi?id=940301</a>
+        </dd>
+        <dt>WebAudio</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=875414">https://bugzilla.mozilla.org/show_bug.cgi?id=875414</a>
+        </dd>
+        <dt>Stagefright</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=872136">https://bugzilla.mozilla.org/show_bug.cgi?id=872136</a>
+        </dd>
+        <dt>WebVTT</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=855851">https://bugzilla.mozilla.org/show_bug.cgi?id=855851</a>
+        </dd>
+        <dt>JARs</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=821596">https://bugzilla.mozilla.org/show_bug.cgi?id=821596</a>
+        </dd>
+        <dt>Fonts</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750695">https://bugzilla.mozilla.org/show_bug.cgi?id=750695</a>
+        </dd>
+        <dt>WebGL</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=658170">https://bugzilla.mozilla.org/show_bug.cgi?id=658170</a>
+        </dd>
+        <dt>Opus</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=750714">https://bugzilla.mozilla.org/show_bug.cgi?id=750714</a>
+        </dd>
+        <dt>WebM</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=793199">https://bugzilla.mozilla.org/show_bug.cgi?id=793199</a>
+        </dd>
+        <dt>IPC</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=777067">https://bugzilla.mozilla.org/show_bug.cgi?id=777067</a>
+        </dd>
+        <dt>WebRTC</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=792125">https://bugzilla.mozilla.org/show_bug.cgi?id=792125</a>
+        </dd>
+        <dt>Graphite2</dt>
+        <dd><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=681976">https://bugzilla.mozilla.org/show_bug.cgi?id=681976</a>
+        </dd>
+    </dl>
+    <hr class="divider"/>
+    <div class="text-center handwriting">Sandbox</div>
+    <br/>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <h4 class="section-text"><i class="fa fa-terminal section-glyph" aria-hidden="true"></i> .exploits</h4>
+                <br>
+                <dl class="dl-horizontal">
+                    <dt><a href="public/exploits/tt-newspost.c">tt-newspost.c</a></dt>
+                    <dd>Local exploit against Newspost 2.1.1</dd>
+                    <dt><a href="public/exploits/tt-procps.c">tt-procps.c</a></dt>
+                    <dd>Local exploit against procps 3.2.5</dd>
+                    <dt><a href="public/exploits/tt-mercury.c">tt-mercury.c</a></dt>
+                    <dd>Remote shell exploit against Pegasus Mercury IMAPd</dd>
+                    <dt><a href="public/exploits/tt-bluecoat.c">tt-bluecoat.c</a></dt>
+                    <dd>BlueCoat WinProxy Remote Heap Overflow PoC</dd>
+                    <dt><a href="public/exploits/tt-eudora.c">tt-eudora.c</a></dt>
+                    <dd>Qualcomm Eudora Imapd Remote PreAuth Ring-0 exploit</dd>
+                    <dt><a href="public/exploits/tt-eudora.py">tt-eudora.py</a></dt>
+                    <dd>Qualcomm Eudora Email Client exploit PoC</dd>
+                    <dt><a href="public/exploits/tt-lotus.py">tt-lotus.py</a></dt>
+                    <dd>IBM Lotus Domino</dd>
+                    <dt><a href="public/exploits/tt-sfxpoc.py">tt-sfxpoc.py</a></dt>
+                    <dd>WinRAR SFX</dd>
+                    <dt><a href="public/exploits/tt-vmware.py">tt-vmware.py</a></dt>
+                    <dd>VMWare VMX - file property heap overflow PoC</dd>
+                    <dt><a href="public/exploits/tt-vmware.c">tt-vmware.c</a></dt>
+                    <dd>VMWare NAT Remote PoC</dd>
+                    <dt><a href="public/exploits/tt-skype.c">tt-skype.c</a></dt>
+                    <dd>Skype - vCard memory corruption PoC</dd>
+                    <dt><a href="public/exploits/tt-bt-zwopen.py">NtOpenFile.py</a></dt>
+                    <dd>BitDefender Internet Security ZwOpenFile()</dd>
+                    <dt><a href="public/exploits/tt-ca-ntopensection.py">CA-NtOpenSection.py</a></dt>
+                    <dd>CA Internet Security Suite ZwOpenSection()</dd>
+                    <dt><a href="public/exploits/tt-ca-ntopensection.py">CA-NtOpenSection.py</a></dt>
+                    <dd>CA Internet Security Suite NtCreateSymbolicLinkObject()</dd>
+                    <dt><a href="public/exploits/tt-ca-ntopensection.py">CA-NtOpenSection.py</a></dt>
+                    <dd>CA Internet Security Suite NtCreateKey()</dd>
+                    <br>
+                    <h4><i class="fa fa-terminal section-glyph" aria-hidden="true"></i> .shellcode</h4>
+                    <br>
+                    <dl class="dl-horizontal">
+                        <dt><a href="public/exploits/bytecode/bsd.tar.gz">bsd.tar.gz</a></dt>
+                        <dd>various BSD shellcode</dd>
+
+                        <dt><a href="public/exploits/bytecode/linux.tar.gz">linux.tar.gz</a></dt>
+                        <dd>various Linux shellcode</dd>
+                    </dl>
+                </dl>
+            </div>
+            <div class="col-lg-6">
+                <h4 class="section-text"><i class="fa fa-terminal section-glyph" aria-hidden="true"></i> .bugs</h4>
+                <br>
+                <dl class="dl-horizontal">
+                    <dt><a href="https://bugs.chromium.org/p/chromium/issues/detail?id=702934">702934</a></dt>
+                    <dd>Google Chrome 59 - UAF in PNGImageDecoder</dd>
+                    <dt><a href="https://bugs.chromium.org/p/chromium/issues/detail?id=669534">669534</a></dt>
+                    <dd>Google Chrome 50 - UAF in PrintWebViewHelper</dd>
+                    <dt><a href="https://bugs.chromium.org/p/chromium/issues/detail?id=588550">588550</a></dt>
+                    <dd>Google Chrome 50 - UAF in CanvasAsyncBlobCreator</dd>
+                    <dt><a href="https://bugs.chromium.org/p/chromium/issues/detail?id=572404">572404</a></dt>
+                    <dd>Google Chrome 49 - UAF in WindowSelector</dd>
+                    <dt><a href="https://nvd.nist.gov/vuln/detail/CVE-2016-1614">CVE-2016-1614</a></dt>
+                    <dd>Google Chrome 46 - Use of uninit. value in Blink</dd>
+                    <dt><a href="https://nvd.nist.gov/vuln/detail/CVE-2015-1227">CVE-2015-1227</a></dt>
+                    <dd>Google Chrome 41 - Use of uninit. value in DragImage</dd>
+                    <dt><a href="https://nvd.nist.gov/vuln/detail/CVE-2014-7941">CVE-2014-7941</a></dt>
+                    <dd>Google Chrome 40 - OOB in SelectionOwner</dd>
+                    <dt><a href="https://nvd.nist.gov/vuln/detail/CVE-2014-7936">CVE-2014-7936</a></dt>
+                    <dd>Google Chrome 40 - UAF in ZoomBubbleView::Close</dd>
+                    <dt><a href="https://nvd.nist.gov/vuln/detail/CVE-2014-7908">CVE-2014-7908</a></dt>
+                    <dd>Google Chrome 39 - MPEG-4 CheckMov() integer overflow</dd>
+                    <dt><a href="public/bugs/X-2012-0929.txt">X-2012-0929</a></dt>
+                    <dd>Google Chrome 24 - WebGL memory corruption</dd>
+                    <dt><a href="https://nvd.nist.gov/vuln/detail/CVE-2010-4203">CVE-2010-4203</a></dt>
+                    <dd>Google Chrome 7 - WebM memory corruption</dd>
+                    <dt><a href="https://www.exploit-db.com/exploits/3101/">CVE-2007-0126</a></dt>
+                    <dd>Opera 9.10 - JPG image DHT marker heap corruption</dd>
+                    <dt><a href="https://www.exploit-db.com/exploits/1984/">CVE-2006-3912</a></dt>
+                    <dd>WinRAR 3.60 - Stack buffer overflow</dd>
+                    <dt><a href="https://www.exploit-db.com/exploits/1615/">CVE-2006-1540</a></dt>
+                    <dd>Microsoft Office 2002 - Array index bounds error</dd>
+                    <dt><a href="public/bugs/X-2006-0126-2.txt">X-2006-0126</a></dt>
+                    <dd>Sambar All-In-One Server IMAPd - Integer overflow</dd>
+                    <dt><a href="public/bugs/X-2006-0126-1.txt">X-2006-0126</a></dt>
+                    <dd>Sambar All-In-One Server FTPd - Memory corruption</dd>
+                    <dt><a href="public/bugs/X-2006-0112.txt">X-2006-0112</a></dt>
+                    <dd>Apple iTunes media sharing server - Denial of service</dd>
+                    <dt><a href="https://www.exploit-db.com/exploits/1254/">CVE-2005-4718</a></dt>
+                    <dd>Opera 8.02 - Denial of service</dd>
+                    <dt><a href="https://www.exploit-db.com/exploits/1253/">EDB-ID: 1253</a></dt>
+                    <dd>Mozilla Firefox 1.0.7</dd>
+                    <dt><a href="http://seclists.org/bugtraq/2005/Dec/238">CVE-2005-4267</a></dt>
+                    <dd>Qualcomm WorldMail IMAPd - Literal processing overflow</dd>
+                    <dt><a href="public/bugs/TA-030305.html">TA-2005-0303</a></dt>
+                    <dd>pcwsd 1.1.0 - Insufficient boundary checking</dd>
+                    <dt><a href="public/bugs/TA-200205.html">TA-2005-0220</a></dt>
+                    <dd>Tin 1.6.2 - Insufficient boundary checking</dd>
+                    <dt><a href="public/bugs/TA-150104.html">TA-2004-0115</a></dt>
+                    <dd>Xtreme ASP Photo Gallery 2.0 - SQL injection</dd>
+                    <dt><a href="https://www.exploit-db.com/exploits/22718/">CVE-2003-1032</a></dt>
+                    <dd>Pi3Web 2.0.2 - Buffer overflow</dd>
+                    <dt><a href="public/bugs/TA-150903.html">TA-2003-0915</a></dt>
+                    <dd>IpSwitch IMail 8.02 - Directory traversal</dd>
+                    <dt><a href="public/bugs/TA-230603.html">TA-2003-0623</a></dt>
+                    <dd>iWeb Server 2 - Directory traversal</dd>
+                    <dt><a href="public/bugs/TA-220603.html">TA-2003-0622</a></dt>
+                    <dd>VisNetic WebMail v5.8 - Failure to handle except. cond.</dd>
+                    <dt><a href="public/bugs/TA-210603.html">TA-2003-0621</a></dt>
+                    <dd>Twilight WebServer v1.3.3.0 - Memory corruption</dd>
+                    <dt><a href="public/bugs/TA-180603.html">TA-2003-0618</a></dt>
+                    <dd>Armida Databased Web Server v1.0</dd>
+                    <dt><a href="public/bugs/TA-250403.html">TA-2003-0527</a></dt>
+                    <dd>Abyss WebServer X1 - Directory traversal</dd>
+                    <dt><a href="public/bugs/TA-250403.html">TA-2003-0425</a></dt>
+                    <dd>CesarFTP Server 0.99g - Denial of service</dd>
+                    <dt><a href="http://www.securityfocus.com/archive/1/317429">BID 317429</a></dt>
+                    <dd>Hyperion FTP Server 3.0 - Buffer overflow</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+    <hr class="divider"/>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <h4 class="section-text"><i class="fa fa-terminal section-glyph" aria-hidden="true"></i> .tools</h4>
+                <dl class="dl-horizontal">
+                    <dt><a href="https://github.com/MozillaSecurity/photon">photon</a></dt>
+                    <dd>A utility for managing RAM disks.</dd>
+                    <dt><a href="https://packetstormsecurity.com/files/download/44283/mistress.rar">mistress</a></dt>
+                    <dd>Modular fuzzer written in Python.</dd>
+                    <dt><a href="flashback-0.1.zip">flashback</a></dt>
+                    <dd>Simple file fuzzer with a WebUI.</dd>
+                    <dt><a href="picasso-0.1.tar.gz">picasso</a></dt>
+                    <dd>Steganography tool to hide text in the LSB of a byte inside a picture.</dd>
+                    <dt><a href="ostrich-0.1.zip">ostrich</a></dt>
+                    <dd>Modular fuzzer written in C.</dd>
+                    <dt>primel</dt>
+                    <dd>Non-listing backdoor for Linux/BSD systems. In sniffing mode it waits for incoming packets at
+                        predefined ports and provides a secure shell after the right packet-port-combination.
+                    </dd>
+                    <dt><a href="programs/hspoof-0.2.tar.gz">hspoof</a></dt>
+                    <dd>Fakes an incoming HTTP GET request with spoofed HTTP Referer and User-Agent while you are
+                        surfing with your browser by acting like a local proxy server.
+                    </dd>
+                    <dt><a href="public/programs/demos/sisyfuzz/">sisyfuzz</a></dt>
+                    <dd>Demo of an old fuzzer prototype with a Metasploit like interface.</dd>
+                </dl>
+            </div>
+            <div class="col-lg-6">
+                <h4 class="section-text"><i class="fa fa-terminal section-glyph" aria-hidden="true"></i> .texts</h4>
+                <dl class="dl-horizontal">
+                    <dt><a href="https://dl.packetstormsecurity.net/shellcode/lnx86_sh.txt">lnx86_sh.txt</a></dt>
+                    <dd>Describing the fundamentals in writing shellcode on Linux x86 systems.</dd>
+                    <dt><a href="public/text/vi-ref.html">vi-ref.html</a></dt>
+                    <dd>Little reference to VI.</dd>
+                </dl>
+                <hr class="divider"/>
+                <h4 class="section-text"><i class="fa fa-terminal section-glyph" aria-hidden="true"></i> .unsorted</h4>
+                <dl class="dl-horizontal">
+                    <dt><a href="http://hg.mozilla.org/mozilla-central/rev/7170a4b7a58d">7170a4b7a58d</a></dt>
+                    <dd>Allows developers to run their WebGL programs with the minimum allowed capabilities by WebGL
+                        specification.
+                    </dd>
+                    <dt><a href="http://people.mozilla.com/~cdiehl/gdbinit.txt">.gdbinit</a></dt>
+                    <dd>A small script for GDB to help in creating bug reports.</dd>
+                    <dt><a href="https://github.com/MozillaSecurity/mozilla-build-configs/">mozconfigs</a></dt>
+                    <dd>Custom mozilla build configurations for various purposes, i.e feature enabled builds of
+                        Firefox.
+                    </dd>
+                    <dt><a href="http://people.mozilla.com/~cdiehl/fonts/">fonts</a></dt>
+                    <dd>Distribution of font tables across various platforms.</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="container">
+        <p class="text-muted"></p>
+    </div>
+</footer>
+</body>
+</html>

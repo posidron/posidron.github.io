@@ -1,0 +1,807 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0088)http://www.hackerboard.de/tutorials/Der%20vi%20-%20Editor%20und%20seine%20Handhabung.htm -->
+<!-- saved from url=(0022)http://internet.e-mail --><HTML><HEAD><TITLE>Der vi - Editor und seine Handhabung</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2600.0" name=GENERATOR></HEAD>
+<BODY link=#6B8E23 alink=#6B8E23 vlink=#6B8E23 text=#000000 bgColor=#ffffff>
+<div align="center"><FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><FONT size=2><BR>
+  <img src="tripbit_logo.png" width="174" height="128"></FONT><font
+face="Verdana, Arial, Helvetica, sans-serif" size=2><b><font size=3><br>
+  <br>
+  Der vi - Editor und seine Handhabung </font></b><font size=2><br>
+  </font></font><FONT size=2><BR>
+  </FONT></FONT> </div>
+<table width="83%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="56%"><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Author:&nbsp; </font></div></td>
+    <td width="44%"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>posidron</font></td>
+  </tr>
+  <tr>
+    <td><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Contact:&nbsp; </font></div></td>
+    <td><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2><a href="posidron@mail.com">posidron@tripbit.org</a></font></td>
+  </tr>
+  <tr>
+    <td><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Website:&nbsp; </font></div></td>
+    <td><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2><a href="www.tripbit.org">tripbit.org</a></font></td>
+  </tr>
+  <tr>
+    <td><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Date:&nbsp;</font></div></td>
+    <td><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Oct., 14th 2002</font></td>
+  </tr>
+</table>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2></FONT><BR>
+<HR size="1">
+<FONT size=2 face="Verdana, Arial, Helvetica, sans-serif"><BR>
+</FONT>
+<DIV align=left><font color="#333333"><em>&#8226; </em></font><FONT
+face="Verdana, Arial, Helvetica, sans-serif"
+size=2><B></B></FONT><FONT face="Verdana, Arial, Helvetica, sans-serif"
+size=2><B>Einleitung</B><BR>
+  </FONT>
+  <DIV align=justify><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Der
+    vi - Editor ist ein oder besser der Standard Editor unter Unix und ist auf
+    jeder Unix Plattform verfügbar. Zwar ist dieser Editor etwas gewöhnungsbedürftig,
+    dies gleicht sich aber in seiner Funktionalität und Umfang der Features wieder
+    aus. Eine der grundlegenden Merkmalen zu anderen Unix Editoren wie z.B. ex
+    und ed ist das er ein Full Screen Editor ist, und nicht wie die anderen ein
+    reiner Zeileneditor. Er wurde von Bill Joy im Jahre 1976 geschrieben. Der
+    Name vi steht für visual und wird "vee eye" ausgesprochen. <BR>
+    <BR>
+    Dieser Text soll als kleine Einleitung in die Welt des vi's dienen. Natürlich
+    wäre die eine oder andere Sache noch ergänzungswürdig, aber für den Einstieg
+    und für den normalen Gebrauch sollte es durchaus hilfreich sein. Wenn man
+    sich weiter und intensiver mit diesem Editor beschäftigen will, empfiehlt
+    sich dieses <A
+href="http://www.oreilly.de/catalog/viger/index.html">Buch</A>.<BR>
+    <BR>
+    <BR>
+    </font><font color="#333333"><em>&#8226; </em></font><FONT face="Verdana, Arial, Helvetica, sans-serif"><B></B></FONT><FONT
+size=2 face="Verdana, Arial, Helvetica, sans-serif"><B>Die Struktur</B><BR>
+    Dieses Schaubild soll die Struktur des vi - Editors zeigen, mit seinen drei
+    Ebenen. Die einzelnen Ebenen mit all seinen Befehlen werden weiter unten aufgelistet
+    und erklärt.<BR>
+    <BR>
+    </FONT></DIV>
+  <TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
+    <TBODY>
+      <TR>
+        <TD vAlign=top height=161> <DIV align=center><FONT face="Verdana, Arial, Helvetica, sans-serif"
+      size=2><IMG height=198
+      src="vi.png"
+      width=432></FONT></DIV></TD>
+      </TR>
+    </TBODY>
+  </TABLE>
+  <div align="justify"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><BR>
+    Die grafik zeigt auch wie man sich durch die einzlenen Ebenen des vi - Editors
+    bewegt, bzw. welche Befehle dazu gebraucht werden.<BR>
+    <BR>
+    <BR>
+    </font><font color="#333333"><em>&#8226; </em></font><B></B><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><B>Los
+    geht's</B><BR>
+    Man kann den vi - Editor auf viele Wege starten und benutzen, unten werden
+    die gängigsten Methoden aufgelistet und beschrieben.<BR>
+    <BR>
+    De </font> <FONT color=#000000 size="2" face="Verdana, Arial, Helvetica, sans-serif">r
+    view Be</FONT><font size="2" face="Verdana, Arial, Helvetica, sans-serif">fehl
+    veranlasst den vi - Editor eine Datei zum Lesen zu laden. Ist die Datei den
+    Sie als Parameter angeben nicht vorhanden, wird diese Datei neu erstellt.</font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><BR>
+    <BR>
+    # view [Dateiname]<BR>
+    <BR>
+    </font><font size="2"> </font><font size="2"> </font><font size="2"> </font></div>
+  <font size="2">
+<DIV align=justify><font face="Verdana, Arial, Helvetica, sans-serif">Der<FONT color=#000000>
+    vi [Dateiname]</FONT> Befehl ruft den vi - Editor auf, ggf. wird eine neue
+    Datei angelegt oder eine bestehende geöffnet. Statt einer Datei, kann man
+    auch mehrere Datei gleichzeitig aufrufen. Dies geschieht indem man die Dateinamen
+    als Parameter bei Start von vi nacheinander durch ein Leerzeichen mit angibt.</font></DIV>
+  <div align="justify"><font face="Verdana, Arial, Helvetica, sans-serif"><BR>
+    <FONT color=#000000># vi [Dateiname]</FONT></font></div>
+  </font>
+  <div align="justify"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><BR>
+    <BR>
+    oder <BR>
+    <BR>
+    # vi [Datei1] [Datei2] ...<BR>
+    <BR>
+    Der vi Befehl ruft den vi - Editor auf und öffnet dabei ein neues Dokument.
+    Bei jedem Start des Editors, wechselt der vi in eine der drei Ebenen, in den
+    Kommandomodus oder auch Befehlsmodus genannt.<BR>
+    <BR>
+    # vi<BR>
+    <BR>
+    Wie man sich durch die einzelnen Ebenen des vi - Editors bewegt kann man aus
+    der oben gezeigten Grafik entnehmen.<BR>
+    <BR>
+    <BR>
+    </font><B><font color="#333333"><em>&#8226; </em></font></B><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><B>Der
+    Befehlszeilenmodus</B></font> </div>
+  <div align="justify"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Der
+    Befehlszeilenmodus auch Last Line Modus genannt, der sich die Eingabeaufforderung
+    für einen Befehl in der letzten Zeile des Bildschirm befindet.<BR>
+    Die einzelnen Befehle dieses Modus nennt man auch ex Befehle. Im folgenden
+    werden ein paar ex - Befehle erklärt die im Befehlszeilenmodus angewendet
+    werden können. Wenn vi startet gelanngt man erst in den Kommandomodus(dazu
+    später mehr...), wenn man von dort in den Befehlszeilenmodus wechseln möchte,
+    gibt man einen Doppelpunkt an, nun wird sich in der unteren bzw. letzten Zeile
+    des Bildschirmes auch ein Doppelpunkt befinden und nachstehend ihr Cursor.
+    Jetzt kann man die folgend Befehle eingeben und anwenden. Will man aus diesem
+    Modus wieder zurück in den Kommandomodus muss man entweder ESC - Escape drücken
+    oder nach einem eingegebenen Befehl die Enter Taste, danach ist man dann automatisch
+    wieder im Kommandomodus.</font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><BR>
+    </font><font face="Verdana, Arial, Helvetica, sans-serif"><br>
+    </font> </div>
+  <div align="justify"></div>
+</DIV>
+<TABLE cellSpacing=2 cellPadding=1 width="100%" border=0>
+  <TBODY>
+    <TR>
+      <TD width="17%" align=left vAlign=top bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Befehl</strong></font></TD>
+      <TD width="83%" align=left vAlign=top bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Erklärung</strong></font></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:w</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Text speichern </FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:w!</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Text speichern, Schreibschutz
+        ignorieren</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:wq</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Text speichern und vi
+        beenden</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>[ESC] ZZ</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>wie :wq</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:x</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>wie :wq</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" height=19 align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:w Datei</FONT></TD>
+      <TD width="83%" height=19 align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Text unter angegebener
+        Datei speichern</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>w &gt;&gt; Datei</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Text an die angegebene
+        Datei anhängen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:q</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Abbrechen, ohne den
+        Text zu speichern,<BR>
+        bei Änderungen im Text erfolgt eine Warnung und kein Abbruch.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:q!</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Editor verlassen ohne
+        zu speichern.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:r Datei</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Text aus der angegebenen
+        Datei nach der momentanen Zeile einfügen.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:e Datei</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Neue Datei bearbeiten
+        (der Textpuffer wird überschrieben). <BR>
+        Ist die aktuelle Datei noch nicht gespeichert worden, erfolgt eine Warnung.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:e! Datei</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Neue Datei bearbeiten
+        (der Textpuffer wird immer überschrieben).</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:n</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Wechselt zur nächsten
+        geladenen Datei (falls beim Aufruf mehr als eine Datei angegeben wurde).</FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<BR>
+</FONT><B><font color="#333333"><em>&#8226; </em></font></B><FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><B>Der Eingabemodus</B><BR>
+<DIV align=justify><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Der
+  Eingabemodus, in diesem Modus wird der Text eingeben. Der Eingabemodus wird
+  aufgerufen indem man, wenn man im Kommandomodus einer der untenstehenden Befehle
+  eingibt. wenn man wieder zurück in den Kommandomodus will, geschieht dies mit
+  der eingabe von ESC Escape. Normalerweise hat der Eingabemodus keine eigenen
+  Befehle, nur die in ihn verlinkt werden wie z.B. Änderungskommandos oder die
+  unten stehenden. Er dient nur dazu den Text einzugeben. Die untenstehenden Befehle
+  hätte man auch zu den Befehlen des Kommandomodus schreiben können, da sie in
+  diesem eingegeben werden um zum Eingabmodus zu gelangen.<BR>
+  <br>
+  </font></DIV>
+<TABLE cellSpacing=2 cellPadding=1 width="100%" border=0>
+  <TBODY>
+    <TR bgColor=#A7BDA6>
+      <TD width="17%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Befehl</strong></font></TD>
+      <TD width="83%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Erklärung</strong></font></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>a</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Eingabe rechts vom Cursor
+        (append). </FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>A</FONT></TD>
+      <TD width="83%" align=left vAlign=top bgcolor="#F6FAF0"><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Eingabe am Zeilenende</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>i</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Engabe links vom Cursor
+        (insert).</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>I</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Eingaben am Zeilenanfang</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>o</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Eingabe ab der aktuellen
+        Zeile, d.h. in der folgenden Zeile, Spalte 1.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>O</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Eingabe in der vorhergehenden
+        Zeile, Spalte 1.</FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><B><BR>
+<BR>
+<BR>
+</B></FONT></FONT><font color="#333333"><em>&#8226; </em></font><B></B><FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><B>Der Kommandomodus</B><BR>
+<DIV align=justify><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Der
+  Kommandomodus, vom dem Komandomodus geht alles aus, von hier werden mit den
+  verschiedenen Steuerbefehlen die einzelnen Ebenen angesprochen. Die Befehle
+  die noch zum Kommandomodus gehören, sehen sie unten aufgelistet und erlärt was
+  sie bewirken.</font></DIV>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><BR>
+<BR>
+<B>+ Blättern auf dem Bildschirm<BR>
+<BR>
+</B></font></FONT></FONT>
+<TABLE cellSpacing=2 cellPadding=1 width="100%" border=0>
+  <TBODY>
+    <TR bgColor=#A7BDA6>
+      <TD width="17%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Befehl</strong></font></TD>
+      <TD width="83%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Erklärung</strong></font></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>CTRL-F</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Eine Bildschirmseite
+        vorwärts</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>CTRL-B</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Eine Bildschirmseite
+        rückwärts</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>CTRL-D</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Eine halbe Bildschirmseite
+        vorwärts</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>CTRL-L</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Bildschirm neu aufbauen</FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<B>+ Cursorpositionierung<BR>
+</B><BR>
+</FONT>
+<TABLE cellSpacing=2 cellPadding=1 width="100%" border=0>
+  <TBODY>
+    <TR bgColor=#A7BDA6>
+      <TD width="17%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Befehl</strong></font></TD>
+      <TD width="83%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Erklärung</strong></font></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>h</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeichen links</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>l</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeichen rechts</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>k</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Spalte höher</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>j</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Spalte tiefer</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>b</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Wortanfang</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>e</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Wortende</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>w</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Anfang nächstes Wort</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>H</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Anfang erste Zeile des
+        Bildschirms</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>L</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Anfang letzten Zeile
+        des Bildschirms</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>0</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>(Null) Zeilenanfang</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>$</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Zeilenende</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>RETURN</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Nächste Zeile</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>nG</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>(Go) Gehe zu Zeile n.
+        n ist eine Zeilennummer. Fehlt die Zahl, wird zur letzten Zeile der Datei
+        gesprungen.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>%</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Sucht zur aktuellen
+        Klammer die korrespondierende öffnende bzw. schließende Klammer</FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<B>+ Löschen von Text<BR>
+<BR>
+</B></FONT>
+<TABLE cellSpacing=2 cellPadding=1 width="100%" border=0>
+  <TBODY>
+    <TR bgColor=#A7BDA6>
+      <TD width="17%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Befehl</strong></font></TD>
+      <TD width="83%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Erklärung</strong></font></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>x</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeichen unter dem Cursor
+        löschen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>X</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeichen vor dem Cursor
+        löschen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>dw</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Ab Cursorposition bis
+        Wortende löschen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>db</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Ab Cursorposition bis
+        Wortanfang lö</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>[<I>n</I>] dd</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>n ganze Zeilen löschen.
+        Falls n fehlt, wird eine Zeile gelöscht.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>D</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Ab Cursorposition bis
+        Zeilenende löschen</FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<B><BR>
++ Änderung des Textes </B>(Änderungskommandos wechseln in den Eingabmodus)<BR>
+<BR>
+</FONT>
+<TABLE cellSpacing=2 cellPadding=1 width="100%" border=0>
+  <TBODY>
+    <TR bgColor=#A7BDA6>
+      <TD width="17%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Befehl</strong></font></TD>
+      <TD width="83%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Erklärung</strong></font></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>r</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeichen ersetzen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" height=15 align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>~</FONT></TD>
+      <TD width="83%" height=15 align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Wechsel Groß-/Kleinbuschstaben</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>R</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Mehrere Zeichen ersetzen
+        (Abschluß mit ESC)</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>s</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Ein Zeichen ersetzen
+        und zusätzliche Zeichen anschließend einfügen (Abschluß mit ESC) </FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>cc</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Gesamte Zeile ändern
+        (Abschluß mit ESC)</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>cw</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Wort ändern (Abschluß
+        mit ESC)</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>C</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Ab Cursorposition bis
+        Zeilenende ändern (Abschluß mit ESC)</FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<B>+ Kopieren und Einfügen</B></FONT> <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><BR>
+<BR>
+</font>
+<TABLE cellSpacing=2 cellPadding=1 width="100%" border=0>
+  <TBODY>
+    <TR bgColor=#A7BDA6>
+      <TD width="17%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Befehl</strong></font></TD>
+      <TD width="83%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Erklärung</strong></font></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>yy</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Aktuelle Zeile kopieren</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>p</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeile vor dem Cusor
+        einfügen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>P</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeil nach dem Cursor
+        einfügen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>yyp</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Aktuelle Zeile duplizieren</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>ddp</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zwei aufeinanderfolgende
+        Zeilen vertauschen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>xp</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zwei aufeinanderfolgende
+        Zeichen vertauschen</FONT></TD>
+    </TR>
+    <TR vAlign=center bgcolor="#F6FAF0">
+      <TD height=30 colSpan=2 align=left><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Mehrere Zeilen werden
+        durch Voranstellen der Zeilenzahl vor "dd" oder "yy" in den Puffer gebracht.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>b6yy</FONT></TD>
+      <TD align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>kopiere die nächsten
+        6 Zeilen in Puffer b</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>bP</FONT></TD>
+      <TD align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Inhalt von Puffer b
+        nach dem Cursor einfügen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>byy</FONT></TD>
+      <TD align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Kopiere aktuelle Zeile
+        nach Puffer b (Pufferbereich von a-z)</FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<B>+ Suchen (Zeichen oder Strings)</B></FONT> <FONT face="Verdana, Arial, Helvetica, sans-serif"
+size=2><BR>
+<BR>
+</FONT>
+<TABLE cellSpacing=2 cellPadding=1 width="100%" border=0>
+  <TBODY>
+    <TR bgColor=#A7BDA6>
+      <TD width="17%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Befehl</strong></font></TD>
+      <TD width="83%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>&nbsp;Erklärung</strong></font></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>fx</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeichen "x" in der momentanen
+        Zeile suchen (vorwärts)</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Fx</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeichen "x" in der momentanen
+        Zeile suchen (rückwärts)</FONT></TD>
+    </TR>
+    <TR vAlign=center bgcolor="#F6FAF0">
+      <TD height=30 colSpan=2 align=left><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Die Suchkommandos müssen
+        mit der Return Taste abgeschlossen werden.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>/str</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>String "str" vorwärts
+        in der Datei suchen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>?str</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>String "str" rückwärts
+        in der Datei suchen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>//</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Letzten Suchbefehl wiederholen
+        (vorwärts)</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>??</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Letzten Suchbefehl wiederholen
+        (rückwärts)</FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><BR>
+<BR>
+<B>+ Sonstige Kommandos</B><BR>
+<BR>
+</FONT>
+<TABLE cellSpacing=2 cellPadding=1 width="100%" border=0>
+  <TBODY>
+    <TR bgColor=#A7BDA6>
+      <TD width="17%" align=left vAlign=top><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong><FONT color=#000000>&nbsp;Befehl</FONT></strong></font></TD>
+      <TD vAlign=top align=left width="83%"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong><FONT color=#000000>&nbsp;Erklärung</FONT></strong></font></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>.</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Letztes Kommando wiederholen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>J</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeilen verbinden (nächste
+        Zeile anhängen)</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>u</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Letzten Befehl rückgängig
+        machen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>U</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Aktuelle Zeile wiederherstellen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>CTRL-g</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Zeilennummer und Dateiinfo
+        zeigen</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>CTRL-v</FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Nächstes Zeichen transparent
+        eingeben (z. B. Steuerzeichen)</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:! <I>cmd</I></FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Verläßt vi temporär
+        und führt das Kommando <I>cmd</I> aus (ggf. Rückkehr mit exit).</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>:r! <I>cmd</I></FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Fügt die Ausgabe von
+        <I>cmd</I> ab Cursorposition ein.</FONT></TD>
+    </TR>
+    <TR bgcolor="#F6FAF0">
+      <TD width="17%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>!! <I>cmd</I></FONT></TD>
+      <TD width="83%" align=left vAlign=top><FONT
+      face="Verdana, Arial, Helvetica, sans-serif" size=2>Benutzt aktuelle Zeile
+        als Eingabe für <I>cmd</I> und ersetzt durch dessen Ausgabe.</FONT></TD>
+    </TR>
+  </TBODY>
+</TABLE>
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2><br>
+</FONT>
+<hr size="1">
+<FONT
+face="Verdana, Arial, Helvetica, sans-serif" size=2> © Copyright 2002 - Tripbit</FONT>
+</BODY></HTML>

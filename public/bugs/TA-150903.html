@@ -1,0 +1,144 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>TA-150903, IMail v6.00/v8.02 - Directory Traversal Vulnerability</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body alink="#6B8E23" link="#6B8E23" vlink="#6B8E23" bgcolor="#ffffff">
+<table width="60%" border="0" cellspacing="2" cellpadding="0">
+  <tr bgcolor="#D8E7C2"> 
+    <td width="76%" height="16"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>&nbsp;Tripbit 
+      </strong></font><font color="#333333"><strong><font face="Arial, Helvetica, sans-serif"><font size="2">Security 
+      Advisory</font></font></strong></font></td>
+    <td width="24%"><div align="right"><font color="#333333" face="Arial, Helvetica, sans-serif"><font size="2"><strong>TA-150903&nbsp;</strong></font></font></div></td>
+  </tr>
+</table>
+<font size="2" face="Arial, Helvetica, sans-serif"><strong><br>
+</strong><font color="#333333"><br>
+</font></font>
+<table width="60%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td width="44%"><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Severity:</strong>&nbsp; 
+        </font></div></td>
+    <td width="56%"><font color="#333333" face="Arial, Helvetica, sans-serif"><font size="2">Medium/High</font></font></td>
+  </tr>
+  <tr> 
+    <td><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Application:&nbsp;</strong></font></div></td>
+    <td><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">IMail v6.00/v8.02</font></td>
+  </tr>
+  <tr> 
+    <td><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Platform:&nbsp;</strong></font></div></td>
+    <td><font color="#333333" face="Arial, Helvetica, sans-serif"><font size="2">Windows</font></font></td>
+  </tr>
+  <tr> 
+    <td><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Class:&nbsp;</strong></font></div></td>
+    <td><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">Directory 
+      Traversal Vulnerability</font></td>
+  </tr>
+  <tr> 
+    <td><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Release 
+        Date:</strong>&nbsp;</font></div></td>
+    <td><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">August, 
+      15th 2003</font></td>
+  </tr>
+  <tr> 
+    <td height="19"><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Vendor:&nbsp; 
+        </strong></font></div></td>
+    <td><font size="2" face="Arial, Helvetica, sans-serif"><a href="http://www.ipswitch.com">http://www.ipswitch.com</a></font></td>
+  </tr>
+</table>
+<font color="#333333" face="Arial, Helvetica, sans-serif"><font size="2"><br>
+<br>
+<strong><font size="2">&#8226; </font>Overview</strong></font></font><font color="#333333"><br>
+</font>
+<table width="60%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">IMail 
+        Server for Windows NT is a high performance SMTP/POP3 e-mail server geared 
+        for today's Internet and corporate intranet messaging requirements. Now 
+        with antispamming controls, IMAP4, and LDAP support, it offers businesses 
+        an attractive alternative to more complex and higher-priced proprietary 
+        products. </font></div></td>
+  </tr>
+</table>
+<font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><br>
+<strong>&#8226; Details</strong><br>
+</font> 
+<table width="60%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td height="32" valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">IMail 
+        is vulnerable to two Directory Traversal Vulnerbilities, firstly in the 
+        Web Calendaring Service, part of IMail v8.02 and secondly in the Web Messaging 
+        Service, part of IMail v6.00 an earlier version. </font><font face="Arial, Helvetica, sans-serif"><font face="Arial, Helvetica, sans-serif"> 
+        <p><font color="#333333" size="2">The standard port for the Web Calendaring 
+          Service is 8484 and for the Web Messaging Service 8383. </font></p>
+        </font></font> 
+        <p><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><em>Example</em>:</font><br>
+          <br>
+          <a href="http://host:port/file.jsp?dir=../../../../../../../../../boot.ini%20">http://host:port/file.jsp?dir=../../../../../../../../../boot.ini</a><br>
+          <a href="http://host:port/file.htm?dir=../../../../../../../../../boot.ini%20">http://host:port/file.htm?dir=../../../../../../../../../boot.ini</a></p>
+      </div></td>
+  </tr>
+</table>
+<font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><br>
+<strong>&#8226; Recommendation</strong><br>
+</font> 
+<table width="60%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"> 
+        No solution for the moment. </font> </div></td>
+  </tr>
+</table>
+<font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><br>
+</font><font color="#333333" size="2"><strong><font face="Arial, Helvetica, sans-serif">&#8226; 
+</font></strong></font><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Vendor</strong> 
+<strong>Response</strong><br>
+</font> 
+<table width="60%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">The 
+        vendor has reportedly been notified to this report.</font></div></td>
+  </tr>
+</table>
+<font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><br>
+<strong>&#8226; Disclaimer</strong><br>
+</font> 
+<table width="60%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">The 
+        information within this paper may change without notice. Use of this information 
+        constitutes acceptance for use in an 'AS IS' condition. There are 'NO' 
+        warranties with regard to this information. In no event shall the author 
+        be liable for any damages whatsoever arising out of or in connection with 
+        the use or spread of this information. Any use of this information is 
+        at the user's own risk.</font></div></td>
+  </tr>
+</table>
+<font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><br>
+<strong>&#8226; Additional information</strong><br>
+</font> 
+<table width="60%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">This 
+      vulnerability have been found and researched by:<br>
+      <br>
+      posidron <a href="mailto:%20posidron@tripbit.org">posidron@tripbit.org</a></font><br>
+      <font color="#333333" size="2" face="Arial, Helvetica, sans-serif">rushjo 
+      <a href="mailto:%20rushjo@tripbit.org">rushjo@tripbit.org</a></font></td>
+  </tr>
+</table>
+<font color="#333333"><br>
+<strong><font size="2" face="Arial, Helvetica, sans-serif">&#8226; Availability</font></strong><font size="2" face="Arial, Helvetica, sans-serif"><br>
+</font></font> 
+<table width="60%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">You 
+        can find the last version of this warning under the following URL: <br>
+        <br>
+        <a href="http://www.tripbit.org/advisories/TA-200303.html">http://www.tripbit.org/advisories/TA-150903.html</a><br>
+        </font></div></td>
+  </tr>
+</table>
+</body>
+</html>
