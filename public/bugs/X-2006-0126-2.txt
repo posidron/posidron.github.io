@@ -33,7 +33,7 @@ II. DESCRIPTION
 
 The IMAP service is vulnerable by sending a special crafted APPEND
 command with an oversized message literal, thus results in a complete
-application shutdown after the exception in the IMAP service occured.
+application shutdown after the exception in the IMAP service occurred.
 
 
 

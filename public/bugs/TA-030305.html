@@ -7,9 +7,9 @@
 
 <body alink="#6B8E23" link="#6B8E23" vlink="#6B8E23" bgcolor="#ffffff">
 <table width="60%" border="0" cellspacing="2" cellpadding="0">
-  <tr bgcolor="#D8E7C2"> 
-    <td width="76%" height="16"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>&nbsp;Tripbit 
-      </strong></font><font color="#333333"><strong><font face="Arial, Helvetica, sans-serif"><font size="2">Security 
+  <tr bgcolor="#D8E7C2">
+    <td width="76%" height="16"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>&nbsp;Tripbit
+      </strong></font><font color="#333333"><strong><font face="Arial, Helvetica, sans-serif"><font size="2">Security
       Advisory</font></font></strong></font></td>
     <td width="24%"><div align="right"><font color="#333333" face="Arial, Helvetica, sans-serif"><font size="2"><strong>TA-030305&nbsp;</strong></font></font></div></td>
   </tr>
@@ -18,32 +18,32 @@
 </strong><font color="#333333"><br>
 </font></font>
 <table width="60%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td width="44%"><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Severity:</strong>&nbsp; 
+  <tr>
+    <td width="44%"><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Severity:</strong>&nbsp;
         </font></div></td>
     <td width="56%"><font color="#333333" face="Arial, Helvetica, sans-serif"><font size="2">High</font></font></td>
   </tr>
-  <tr> 
+  <tr>
     <td><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Application:&nbsp;</strong></font></div></td>
     <td><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">pcwsd 1.1.0</font></td>
   </tr>
-  <tr> 
+  <tr>
     <td><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Platform:&nbsp;</strong></font></div></td>
     <td><font color="#333333" face="Arial, Helvetica, sans-serif"><font size="2">Windows</font></font></td>
   </tr>
-  <tr> 
+  <tr>
     <td><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Class:&nbsp;</strong></font></div></td>
-    <td><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">Insufficient 
+    <td><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">Insufficient
       Boundary Checking</font></td>
   </tr>
-  <tr> 
-    <td><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Release 
+  <tr>
+    <td><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Release
         Date:</strong>&nbsp;</font></div></td>
-    <td><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">March 
+    <td><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">March
       03rd, 2005</font></td>
   </tr>
-  <tr> 
-    <td height="19"><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Vendor:&nbsp; 
+  <tr>
+    <td height="19"><div align="right"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><strong>Vendor:&nbsp;
         </strong></font></div></td>
     <td><font size="2" face="Arial, Helvetica, sans-serif"><a href="http://home.geggus.net/pcwsd/">http://home.geggus.net/pcwsd/</a></font></td>
   </tr>
@@ -53,20 +53,20 @@
 <strong><font size="2">&#8226; </font>Overview</strong></font></font><font color="#333333"><br>
 </font>
 <table width="60%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">pcwsd 
-        (PC weather sensor daemon) is a TCP daemon and data logging software for 
-        receiving data from the environmental radio sensors sold by German electronic 
+  <tr>
+    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">pcwsd
+        (PC weather sensor daemon) is a TCP daemon and data logging software for
+        receiving data from the environmental radio sensors sold by German electronic
         supplier ELV.</font></div></td>
   </tr>
 </table>
 <font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><br>
 <strong>&#8226; Details</strong><br>
-</font> 
+</font>
 <table width="60%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="32" valign="top"><div align="justify"><font color="#333333" size="2" face="Courier New, Courier, mono">pcwsd-1.1.0/pcwsd.c 
-        </font><font face="Arial, Helvetica, sans-serif"> 
+  <tr>
+    <td height="32" valign="top"><div align="justify"><font color="#333333" size="2" face="Courier New, Courier, mono">pcwsd-1.1.0/pcwsd.c
+        </font><font face="Arial, Helvetica, sans-serif">
         <p><font color="#333333" size="2" face="Courier New, Courier, mono">[...]<br>
           63: #define MAXLINE 4096<br>
           [...]</font></p>
@@ -87,7 +87,7 @@
           724: &nbsp;&nbsp;char buf[70];<br>
           725: &nbsp;&nbsp;char chr;<br>
           726:<br>
-          731: &nbsp;&nbsp;args=sscanf(cmdline, &quot;get %s %1d%c&quot;, sname, 
+          731: &nbsp;&nbsp;args=sscanf(cmdline, &quot;get %s %1d%c&quot;, sname,
           &amp;saddr, &amp;chr);<br>
           732: &nbsp;&nbsp;if ((args == 3) &amp;&amp; (chr=='\r')) {<br>
           733:<br>
@@ -96,14 +96,14 @@
           736:<br>
           737: &nbsp;&nbsp;&nbsp;&nbsp;/* write requested value */<br>
           738: &nbsp;&nbsp;&nbsp;&nbsp;for (i=0; i&lt;NUMDATA;i++) {<br>
-          739: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (strcmp(sname,commands[i]) 
+          739: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (strcmp(sname,commands[i])
           == 0) {<br>
           740: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;runSubCommand(fd,i,saddr);<br>
           741: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;break;<br>
           742: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
           742: &nbsp;&nbsp;&nbsp;&nbsp;}<br>
           [...]</font></p>
-        <font face="Arial, Helvetica, sans-serif"> 
+        <font face="Arial, Helvetica, sans-serif">
         <p><font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><em>Example</em>:<br>
           <br>
           $ telnet 127.0.0.1 4711<br>
@@ -112,48 +112,48 @@
           Escape character is '^]'.<br>
           PCWSD Version 1.1.0 ready<br>
           GET /AAAAAAAAAA...</font></p>
-        </font></font> 
-        <p><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">Connection 
+        </font></font>
+        <p><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">Connection
           closed by foreign host.<br>
           $</font></p>
         <font face="Arial, Helvetica, sans-serif"></font></div></td>
   </tr>
 </table>
 <br>
-<font color="#333333" size="2" face="Arial, Helvetica, sans-serif"> <strong>&#8226; 
+<font color="#333333" size="2" face="Arial, Helvetica, sans-serif"> <strong>&#8226;
 Disclaimer</strong><br>
-</font> 
+</font>
 <table width="60%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">The 
-        information within this paper may change without notice. Use of this information 
-        constitutes acceptance for use in an 'AS IS' condition. There are 'NO' 
-        warranties with regard to this information. In no event shall the author 
-        be liable for any damages whatsoever arising out of or in connection with 
-        the use or spread of this information. Any use of this information is 
+  <tr>
+    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">The
+        information within this paper may change without notice. Use of this information
+        constitutes acceptance for use in an 'AS IS' condition. There are 'NO'
+        warranties with regard to this information. In no event shall the author
+        be liable for any damages whatsoever arising out of or in connection with
+        the use or spread of this information. Any use of this information is
         at the user's own risk.</font></div></td>
   </tr>
 </table>
 <font color="#333333" size="2" face="Arial, Helvetica, sans-serif"><br>
 <strong>&#8226; Additional information</strong><br>
-</font> 
+</font>
 <table width="60%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td valign="top"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">This 
-      vulnerability have been found and researched by:<br>
+  <tr>
+    <td valign="top"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">This
+      vulnerability has been found and researched by:<br>
       <br>
       posidron <a href="mailto:%20posidron@tripbit.org">posidron@tripbit.org</a></font><br>
-      <font color="#333333" size="2" face="Arial, Helvetica, sans-serif">rushjo 
+      <font color="#333333" size="2" face="Arial, Helvetica, sans-serif">rushjo
       <a href="mailto:%20rushjo@tripbit.org">rushjo@tripbit.org</a></font></td>
   </tr>
 </table>
 <font color="#333333"><br>
 <strong><font size="2" face="Arial, Helvetica, sans-serif">&#8226; Availability</font></strong><font size="2" face="Arial, Helvetica, sans-serif"><br>
-</font></font> 
+</font></font>
 <table width="60%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">You 
-        can find the last version of this warning under the following URL: <br>
+  <tr>
+    <td valign="top"><div align="justify"><font color="#333333" size="2" face="Arial, Helvetica, sans-serif">You
+        can find the latest version of this warning under the following URL: <br>
         <br>
         <a href="http://www.tripbit.org/advisories/TA-200303.html">http://www.tripbit.org/advisories/TA-030305.html</a><br>
         </font></div></td>

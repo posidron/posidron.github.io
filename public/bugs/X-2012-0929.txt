@@ -185,6 +185,8 @@
  rfrees  by size class: 8:1483946; 9:13933; 10:22912; 11:4356; 12:3057; 13:841; 14:17168; 15:3619; 16:11; 17:1596; 18:5; 19:687; 20:687;
  Stats: malloc large: 4372 small slow: 9680
 */
+
+
 function crash() {
     var backup = document.getElementById("canvasbox").innerHTML;
     var o = webgl("canvas", "void main() {}", "void main() {}");

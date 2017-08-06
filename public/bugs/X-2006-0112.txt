@@ -34,7 +34,7 @@ this purpose.
 II. DESCRIPTION
 
 A special crafted HTTP packet forces the iTunes Media Sharing Server
-to use 100% CPU ressources and the user to a restart of the application.
+to use 100% CPU resources and the user to a restart of the application.
 
 The Media Sharing Server is not enabled by default.
 To activate the Media Sharing Server: Edit -> Settings -> Share
