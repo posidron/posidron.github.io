@@ -56,8 +56,8 @@
           </div>
         </div>
         <div class="col-md-6">
-          <div id="iam-at-text">Mozilla Product Integrity</div>
-          <div id="iam-text">Security Engineer</div>
+          <div id="iam-at-text">Mozilla</div>
+          <div id="iam-text">Sr. Security Engineer</div>
         </div>
         <div class="col-md-3">
           <blockquote class="pull-right">
@@ -74,15 +74,6 @@
               </a>
               <a class="btn btn-social" href="skype:nordisop@gmail.com">
                 <span class="fa fa-skype"></span>
-              </a>
-              <a
-                class="btn btn-social"
-                href="https://www.irccloud.com/invite?channel=%23fuzzing&hostname=irc.mozilla.org&port=6697&ssl=1"
-              >
-                <span class="fa fa-firefox"></span>
-              </a>
-              <a class="btn btn-social" href="https://vk.com/posidron">
-                <span class="fa fa-vk"></span>
               </a>
               <a class="btn btn-social" href="https://fb.com/posidron">
                 <span class="fa fa-facebook"></span>
@@ -109,12 +100,27 @@
     </div>
 
     <div class="container">
+
       <hr class="divider" />
       <h4 id="projects" class="section-text">
-        <i class="fa fa-cubes section-glyph" aria-hidden="true"></i> projects
+        <i class="fa fa-cubes section-glyph" aria-hidden="true"></i> Projects
       </h4>
       <br />
       <div class="img-evenly">
+        <div>
+        <a href="https://github.com/mozillasecurity/virgo">
+          <img
+            src="static/images/virgo.png"
+            class="pop transition-icon"
+            data-container="body"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-original-title="Virgo"
+            data-content="A crowdsourced fuzzing cluster."
+          />
+        </a>
+      </div>
+      <div>
         <a href="http://mozillasecurity.github.io/laniakea">
           <img
             src="static/images/laniakea.png"
@@ -126,17 +132,8 @@
             data-content="A utility for managing EC2 instances at AWS and aids in setting up a fuzzing cluster. Now also part of FuzzManager."
           />
         </a>
-        <a href="http://github.com/mozillasecurity/argus">
-          <img
-            src="static/images/argus.png"
-            class="pop transition-icon"
-            data-container="body"
-            data-toggle="popover"
-            data-placement="bottom"
-            data-original-title="Argus"
-            data-content="A source code management monitoring system written in NodeJS."
-          />
-        </a>
+      </div>
+      <div>
         <a href="https://github.com/mozillasecurity/octo">
           <img
             src="static/images/octo.png"
@@ -148,6 +145,8 @@
             data-content="A unified fuzzing library in JavaScript."
           />
         </a>
+      </div>
+      <div>
         <a href="http://mozillasecurity.github.io/dharma">
           <img
             src="static/images/dharma.png"
@@ -159,6 +158,8 @@
             data-content="A generation-based, context-free grammar fuzzer."
           />
         </a>
+      </div>
+      <div>
         <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=fuzzing-ipc-ipdl">
           <img
             src="static/images/faulty.png"
@@ -170,6 +171,8 @@
             data-content="A patch for fuzzing IPC Protocol Definition Language (IPDL) Protocols."
           />
         </a>
+      </div>
+    <div>
         <a href="https://github.com/mozillasecurity/orion">
           <img
             src="static/images/orion.png"
@@ -181,6 +184,8 @@
             data-content="Monorepo for building and publishing multiple Docker containers as microservices within a single repository."
           />
         </a>
+      </div>
+    <div>
         <a href="https://github.com/mozillasecurity/fuzzdata">
           <img
             src="static/images/fuzzdata.png"
@@ -193,13 +198,11 @@
           />
         </a>
       </div>
-    </div>
+      </div>
 
-    <div class="container">
       <hr class="divider" />
       <h4 id="projects" class="section-text">
-        <i class="fa fa-cubes section-glyph" aria-hidden="true"></i> inactive /
-        retired
+        <i class="fa fa-cubes section-glyph" aria-hidden="true"></i> Inactive
       </h4>
       <br />
       <div class="img-evenly">
@@ -214,37 +217,15 @@
             data-content="A modular fuzzer for in-depth testing of WebAPIs."
           />
         </a>
-        <a href="https://github.com/mozillasecurity/dolly">
+        <a href="http://github.com/mozillasecurity/argus">
           <img
-            src="static/images/dolly.png"
+            src="static/images/argus.png"
             class="pop transition-icon"
             data-container="body"
             data-toggle="popover"
             data-placement="bottom"
-            data-original-title="Dolly"
-            data-content="A Cookiecutter project template for projects in Python."
-          />
-        </a>
-        <a href="https://github.com/mozillasecurity/hermes">
-          <img
-            src="static/images/hermes.png"
-            class="pop transition-icon"
-            data-container="body"
-            data-toggle="popover"
-            data-placement="bottom"
-            data-original-title="Hermes"
-            data-content="Hermes is the codename for the integrated Message Manager fuzzer in Firefox."
-          />
-        </a>
-        <a href="https://github.com/mozillasecurity/quokka">
-          <img
-            src="static/images/quokka.png"
-            class="pop transition-icon"
-            data-container="body"
-            data-toggle="popover"
-            data-placement="bottom"
-            data-original-title="Quokka"
-            data-content="A utility to launch and monitor application for faults."
+            data-original-title="Argus"
+            data-content="A source code management monitoring system written in NodeJS."
           />
         </a>
         <a href="http://mozillasecurity.github.io/peach">
@@ -258,17 +239,15 @@
             data-content="A fuzzing framework which uses a DSL for building fuzzers and an observer based architecture to execute and monitor them. <a href='public/programs/demos/moz_peach_demo.webm'>Demo</a>"
           />
         </a>
-        <a href="http://mozillasecurity.github.io/hedwig">
-          <img
-            src="static/images/hedwig.png"
-            class="pop transition-icon"
-            data-container="body"
-            data-toggle="popover"
-            data-placement="bottom"
-            data-original-title="Hedwig"
-            data-content="A commit monitor for GitHub using the GitHub REST API."
-          />
         </a>
+      </div>
+
+      <hr class="divider" />
+      <h4 id="projects" class="section-text">
+        <i class="fa fa-cubes section-glyph" aria-hidden="true"></i> Retired
+      </h4>
+      <br />
+      <div class="img-evenly">
         <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=fuzzing-shmem">
           <img
             src="static/images/shmem.png"
@@ -280,10 +259,44 @@
             data-content="A Shared Memory fuzzer integrated in Firefox."
           />
         </a>
+        <a href="https://github.com/mozillasecurity/quokka">
+          <img
+            src="static/images/quokka.png"
+            class="pop transition-icon"
+            data-container="body"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-original-title="Quokka"
+            data-content="A utility to launch and monitor application for faults."
+          />
+        </a>
+        <a href="https://github.com/mozillasecurity/hermes">
+          <img
+            src="static/images/hermes.png"
+            class="pop transition-icon"
+            data-container="body"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-original-title="Hermes"
+            data-content="Hermes is the codename for the integrated Message Manager fuzzer in Firefox."
+          />
+        </a>
+        <a href="https://github.com/mozillasecurity/dolly">
+          <img
+            src="static/images/dolly.png"
+            class="pop transition-icon"
+            data-container="body"
+            data-toggle="popover"
+            data-placement="bottom"
+            data-original-title="Dolly"
+            data-content="A Cookiecutter project template for projects in Python."
+          />
+        </a>
       </div>
+
       <hr class="divider" />
       <h4 id="fuzzing" class="section-text">
-        <i class="fa fa-cogs section-glyph" aria-hidden="true"></i> fuzzing
+        <i class="fa fa-cogs section-glyph" aria-hidden="true"></i> Fuzzing
       </h4>
       <br />
       <dl class="dl-horizontal">
@@ -638,10 +651,6 @@
               <dd>
                 A lightweight fuzzer for the encoder and decoder of OpenH264.
               </dd>
-              <dt>
-                <a href="https://github.com/mozillasecurity/photon">photon</a>
-              </dt>
-              <dd>A utility for managing RAM disks.</dd>
               <dt>
                 <a
                   href="https://github.com/posidron/posidron.github.io/tree/master/public/programs/pylf"
