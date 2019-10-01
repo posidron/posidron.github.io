@@ -43,18 +43,6 @@ hr {
   color: var(--color-handwriting);
 }
 
-.img-circle {
-  width: 200px;
-  height: 200px;
-  overflow: hidden;
-}
-
-.img-circle img {
-  height: 100%;
-  transform: translateX(-50%);
-  margin-left: 50%;
-}
-
 .section-glyph {
   color: var(--color-section-glyph);
 }
@@ -81,6 +69,7 @@ hr {
   display: flex;
   justify-content: space-around;
   align-content: center;
+  flex-flow: row wrap;
 }
 
 .popover {
@@ -116,6 +105,9 @@ footer {
 }
 
 .avatar {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
 }
 
 .light-up {
