@@ -1,0 +1,57 @@
+==================================================================
+https://keybase.io/posidron
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://posidron.github.com
+  * I am posidron (https://keybase.io/posidron) on keybase.
+  * I have a public key ASCFFE-Qs15QexPpUQmM8kYWWqAP3KESBlp9zj509z4JBwo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120e1074d54202f5230dabf7655edf29494f42d6bb99b974833990020bc5a4c8b870a",
+      "host": "keybase.io",
+      "kid": "012085144f90b35e507b13e951098cf246165aa00fdca112065a7dce3e74f73e09070a",
+      "uid": "24d931a5e5e3fc8fc057d00f06fe6419",
+      "username": "posidron"
+    },
+    "merkle_root": {
+      "ctime": 1576578500,
+      "hash": "a82947026f0a9ae8092080e65595d241624500ade3219e56a9a1c437034cc33b6afb2ed776541d720b94afff4ade7b88e72be54d0af887fdef92a6fbf345e39b",
+      "hash_meta": "28f860359b70907992d080434519021aa41fadfaa6ca2af910bad17548713554",
+      "seqno": 13690126
+    },
+    "service": {
+      "entropy": "m2PWKUOVPUPbz6lxF1OsQ3NK",
+      "hostname": "posidron.github.com",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "5.1.1"
+  },
+  "ctime": 1576578512,
+  "expire_in": 504576000,
+  "prev": "4f7d7093919ff7910e01d83254bd972dd6e394dfe8c45edf0448261380599d57",
+  "seqno": 26,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEghRRPkLNeUHsT6VEJjPJGFlqgD9yhEgZafc4+dPc+CQcKp3BheWxvYWTESpcCGsQgT31wk5Gf95EOAdgyVL2XLdbjlN/oxF7fBEgmE4BZnVfEICT27NW/L9bOESk5usdae4RwnmD3qKy2PLcuh4BMs4BrAgHCo3NpZ8RA2iN0ox42Czom2WuVuyiCKxNQn7aEDaUI/f0PG2muPkyb70BEXogi9PnZw8gK+LH7uZbrQO321nsoLSW2cvFYCahzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIM5EpCCXettEOxMAqB4maU/659UdBkS8okjKHmBsPldyo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/posidron
+
+==================================================================
+
